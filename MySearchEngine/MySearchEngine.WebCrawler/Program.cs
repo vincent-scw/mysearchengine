@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MySearchEngine.WebCrawler
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var crawler = new WebCrawler();
+            await crawler.Crawl(new Uri("https://www.differencebetween.com/"), CancellationToken.None);
         }
     }
 }
