@@ -8,8 +8,17 @@ namespace MySearchEngine.WebCrawler
     {
         static async Task Main(string[] args)
         {
-            var crawler = new WebCrawler();
-            await crawler.Crawl(new Uri("https://www.differencebetween.com/"), CancellationToken.None);
+            Console.WriteLine("Start crawling...press any key to cancel...");
+            var cancellationToken = new CancellationTokenSource();
+
+            var executor = new Executor();
+            await executor.StartAsync("https://www.differencebetween.com/", cancellationToken.Token);
+
+            Console.ReadLine();
+            cancellationToken.Cancel();
+
+            Console.WriteLine("Processing cancelled.");
+            Console.ReadLine();
         }
     }
 }

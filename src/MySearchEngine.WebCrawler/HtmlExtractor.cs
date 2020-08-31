@@ -7,7 +7,7 @@ using MySearchEngine.WebCrawler.Models;
 
 namespace MySearchEngine.WebCrawler
 {
-    internal class HtmlExtractor
+    internal sealed class HtmlExtractor
     {
         private static IDictionary<string, string> linkList = new Dictionary<string, string>
         {
@@ -21,7 +21,7 @@ namespace MySearchEngine.WebCrawler
             {"<option", "</option>"},
         };
 
-        public HtmlInfo Extract(string htmlContent)
+        public static HtmlInfo Extract(string htmlContent)
         {
             var (links, afterRemove) = ExtractFirst(htmlContent);
             var purified = Purify(afterRemove);
@@ -29,7 +29,7 @@ namespace MySearchEngine.WebCrawler
             return new HtmlInfo { Links = links, Content = purified };
         }
 
-        private (List<string> links, string afterRemove) ExtractFirst(string htmlContent)
+        private static (List<string> links, string afterRemove) ExtractFirst(string htmlContent)
         {
             var links = new List<string>();
             var sb = new StringBuilder();
@@ -64,7 +64,7 @@ namespace MySearchEngine.WebCrawler
             return (links, sb.ToString());
         }
 
-        private string Purify(string htmlContent)
+        private static string Purify(string htmlContent)
         {
             // Remove all html tags
             var foundList = htmlContent.Search(new string[] { "<" });
