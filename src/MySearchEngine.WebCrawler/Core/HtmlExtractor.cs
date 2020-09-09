@@ -5,7 +5,7 @@ using System.Text;
 using MySearchEngine.Algorithms.Extensions;
 using MySearchEngine.WebCrawler.Models;
 
-namespace MySearchEngine.WebCrawler
+namespace MySearchEngine.WebCrawler.Core
 {
     internal sealed class HtmlExtractor
     {

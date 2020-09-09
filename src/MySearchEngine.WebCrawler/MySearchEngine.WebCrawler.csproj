@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MySearchEngine.Algorithms\MySearchEngine.Algorithms.csproj" />
+    <ProjectReference Include="..\MySearchEngine.Repository\MySearchEngine.Repository.csproj" />
   </ItemGroup>
 
 </Project>
