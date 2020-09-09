@@ -15,24 +15,27 @@ namespace MySearchEngine.WebCrawler.Core
     class Executor
     {
         private readonly BufferBlock<Uri> _bufferBlock;
-        private readonly TransformBlock<Uri, HtmlInfo> _downloadBlock;
+        private readonly TransformBlock<Uri, PageInfo> _downloadBlock;
 
+        private readonly IPageExtractor _pageExtractor;
         private readonly ICrawledRepository _crawledRepository;
 
         public Executor(
+            IPageExtractor extractor,
             ICrawledRepository crawledRepository)
         {
-            _crawledRepository = crawledRepository ?? new DictionaryCrawledRepository();
+            _pageExtractor = extractor ?? throw new ArgumentNullException(nameof(IPageExtractor));
+            _crawledRepository = crawledRepository ?? throw new ArgumentNullException(nameof(ICrawledRepository));
 
             _bufferBlock = new BufferBlock<Uri>();
-            _downloadBlock = new TransformBlock<Uri, HtmlInfo>(DownloadTask());
+            _downloadBlock = new TransformBlock<Uri, PageInfo>(DownloadTask());
 
             var linkOptions = new DataflowLinkOptions { PropagateCompletion = true };
 
             _bufferBlock.LinkTo(_downloadBlock, linkOptions);
         }
 
-        private Func<Uri, Task<HtmlInfo>> DownloadTask()
+        private Func<Uri, Task<PageInfo>> DownloadTask()
         {
             return async (uri) =>
             {
@@ -40,11 +43,7 @@ namespace MySearchEngine.WebCrawler.Core
 
                 try
                 {
-                    var content = await new HttpClient(
-                        new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip })
-                    .GetStringAsync(uri);
-
-                    var htmlInfo = HtmlExtractor.Extract(content);
+                    var htmlInfo = await _pageExtractor.ExtractAsync(uri);
                     htmlInfo.Links.ForEach(l => {
                         var newUri = new Uri(l);
                         // Pre-add uri to repository

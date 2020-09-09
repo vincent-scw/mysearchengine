@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using MySearchEngine.Algorithms.Extensions;
 using MySearchEngine.WebCrawler.Models;
 
 namespace MySearchEngine.WebCrawler.Core
 {
-    internal sealed class HtmlExtractor
+    internal class PageExtractor : IPageExtractor
     {
         private static IDictionary<string, string> linkList = new Dictionary<string, string>
         {
@@ -21,12 +24,16 @@ namespace MySearchEngine.WebCrawler.Core
             {"<option", "</option>"},
         };
 
-        public static HtmlInfo Extract(string htmlContent)
+        public async Task<PageInfo> ExtractAsync(Uri uri)
         {
+            var htmlContent = await new HttpClient(
+                       new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip })
+                   .GetStringAsync(uri);
+
             var (links, afterRemove) = ExtractFirst(htmlContent);
             var purified = Purify(afterRemove);
 
-            return new HtmlInfo { Links = links, Content = purified };
+            return new PageInfo { Uri = uri, Links = links, Content = purified };
         }
 
         private static (List<string> links, string afterRemove) ExtractFirst(string htmlContent)
