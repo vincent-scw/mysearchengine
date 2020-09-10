@@ -45,8 +45,7 @@ namespace MySearchEngine.WebCrawler.Core
                 try
                 {
                     var htmlInfo = await _pageDownloader.DownloadAsync(uri);
-                    htmlInfo.Links.ToList().ForEach(l => {
-                        var newUri = new Uri(l);
+                    htmlInfo.Links.ToList().ForEach(newUri => {
                         // Pre-add uri to repository
                         if (_crawledRepository.AddIfNew(newUri))
                         {

@@ -36,7 +36,7 @@ namespace MySearchEngine.WebCrawler.Core
                 var (links, content) = _pageExtractor.Extract(htmlContent);
                 return new PageInfo(uri)
                 {
-                    Links = links,
+                    Links = links.Where(x => Uri.IsWellFormedUriString(x, UriKind.Absolute)).Select(l => new Uri(l)),
                     OriginContent = htmlContent,
                     PurifiedContent = content,
                     Analyzable = true
