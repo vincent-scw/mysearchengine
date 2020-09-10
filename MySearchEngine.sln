@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Algorithms.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.Repository", "src\MySearchEngine.Repository\MySearchEngine.Repository.csproj", "{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.WebCrawler.Tests", "test\MySearchEngine.WebCrawler.Tests\MySearchEngine.WebCrawler.Tests.csproj", "{9D6D9F6E-A9AA-4BF6-B163-05A596221812}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{D7C4FDD4-78F7-40C4-BB85-0BCC1CB1BEC8} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF} = {7D0FA138-EF52-4FCB-9C78-E12E62779EFA}
 		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
+		{9D6D9F6E-A9AA-4BF6-B163-05A596221812} = {7D0FA138-EF52-4FCB-9C78-E12E62779EFA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D1257B8-DFCB-4B3B-9E38-06419C1DCCEA}

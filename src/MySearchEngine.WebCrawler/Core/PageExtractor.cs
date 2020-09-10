@@ -1,12 +1,7 @@
-﻿using System;
+﻿using MySearchEngine.Algorithms.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using MySearchEngine.Algorithms.Extensions;
-using MySearchEngine.WebCrawler.Models;
 
 namespace MySearchEngine.WebCrawler.Core
 {
@@ -19,6 +14,8 @@ namespace MySearchEngine.WebCrawler.Core
 
         private static IDictionary<string, string> removeList = new Dictionary<string, string>
         {
+            {"<![CDATA[", string.Empty},
+            {"]]>", string.Empty},
             {"<style", "</style>"},
             {"<script", "</script>"},
             {"<option", "</option>"},
@@ -51,8 +48,11 @@ namespace MySearchEngine.WebCrawler.Core
                 }
                 else
                 {
-                    // Remove not display content
-                    sb.Append(htmlContent[index..position]);
+                    if (index <= position)
+                    {
+                        // Remove not display content
+                        sb.Append(htmlContent[index..position]);
+                    }
 
                     var removeValue = removeList[value];
                     index = htmlContent.IndexOf(removeValue, startIndex) + removeValue.Length;
@@ -76,7 +76,8 @@ namespace MySearchEngine.WebCrawler.Core
             var index = 0;
             foreach (var (position, value) in foundList)
             {
-                sb.Append(htmlContent[index..position]);
+                if (index <= position)
+                    sb.Append(htmlContent[index..position]);
 
                 index = htmlContent.IndexOf(">", position + value.Length) + 1;
             }
