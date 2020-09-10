@@ -3,6 +3,7 @@ using MySearchEngine.WebCrawler.Core;
 using MySearchEngine.WebCrawler.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -17,14 +18,14 @@ namespace MySearchEngine.WebCrawler.Core
         private readonly BufferBlock<Uri> _bufferBlock;
         private readonly TransformBlock<Uri, PageInfo> _downloadBlock;
 
-        private readonly IPageExtractor _pageExtractor;
+        private readonly IPageDownloader _pageDownloader;
         private readonly ICrawledRepository _crawledRepository;
 
         public Executor(
-            IPageExtractor extractor,
+            IPageDownloader downloader,
             ICrawledRepository crawledRepository)
         {
-            _pageExtractor = extractor ?? throw new ArgumentNullException(nameof(IPageExtractor));
+            _pageDownloader = downloader ?? throw new ArgumentNullException(nameof(IPageDownloader));
             _crawledRepository = crawledRepository ?? throw new ArgumentNullException(nameof(ICrawledRepository));
 
             _bufferBlock = new BufferBlock<Uri>();
@@ -43,8 +44,8 @@ namespace MySearchEngine.WebCrawler.Core
 
                 try
                 {
-                    var htmlInfo = await _pageExtractor.ExtractAsync(uri);
-                    htmlInfo.Links.ForEach(l => {
+                    var htmlInfo = await _pageDownloader.DownloadAsync(uri);
+                    htmlInfo.Links.ToList().ForEach(l => {
                         var newUri = new Uri(l);
                         // Pre-add uri to repository
                         if (_crawledRepository.AddIfNew(newUri))
@@ -65,6 +66,7 @@ namespace MySearchEngine.WebCrawler.Core
 
         public async Task StartAsync(Uri uri, CancellationToken cancellationToken)
         {
+            _crawledRepository.AddIfNew(uri);
             await _bufferBlock.SendAsync(uri);
 
             while (!cancellationToken.IsCancellationRequested)

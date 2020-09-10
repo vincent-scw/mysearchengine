@@ -1,13 +1,11 @@
-﻿using MySearchEngine.WebCrawler.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MySearchEngine.WebCrawler.Core
 {
-    interface IPageExtractor
+    internal interface IPageExtractor
     {
-        Task<PageInfo> ExtractAsync(Uri uri);
+        (IEnumerable<string> links, string content) Extract(string htmlContent);
     }
 }

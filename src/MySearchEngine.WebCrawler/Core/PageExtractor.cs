@@ -24,16 +24,12 @@ namespace MySearchEngine.WebCrawler.Core
             {"<option", "</option>"},
         };
 
-        public async Task<PageInfo> ExtractAsync(Uri uri)
+        public (IEnumerable<string> links, string content) Extract(string htmlContent)
         {
-            var htmlContent = await new HttpClient(
-                       new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip })
-                   .GetStringAsync(uri);
-
             var (links, afterRemove) = ExtractFirst(htmlContent);
             var purified = Purify(afterRemove);
 
-            return new PageInfo { Uri = uri, Links = links, Content = purified };
+            return (links, purified);
         }
 
         private static (List<string> links, string afterRemove) ExtractFirst(string htmlContent)

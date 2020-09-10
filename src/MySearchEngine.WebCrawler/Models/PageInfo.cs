@@ -6,8 +6,17 @@ namespace MySearchEngine.WebCrawler.Models
 {
     public class PageInfo
     {
-        public Uri Uri { get; set; }
-        public List<string> Links { get; set; }
-        public string Content { get; set; }
+        public PageInfo(Uri uri)
+        {
+            Uri = uri;
+            Links = new List<string>();
+            Analyzable = true;
+        }
+
+        public Uri Uri { get; }
+        public IEnumerable<string> Links { get; set; }
+        public string OriginContent { get; set; }
+        public string PurifiedContent { get; set; }
+        public bool Analyzable { get; set; }
     }
 }
