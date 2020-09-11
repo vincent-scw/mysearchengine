@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MySearchEngine.Algorithms.Tests")]
+[assembly: InternalsVisibleTo("MySearchEngine.Core.Tests")]
 
-namespace MySearchEngine.Algorithms
+namespace MySearchEngine.Core
 {
     internal class AcPatternMatcher
     {

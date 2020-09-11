@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MySearchEngine.Algorithms.Tests
+namespace MySearchEngine.Core.Tests
 {
     [TestClass]
     public class AcPatternMatcherTests

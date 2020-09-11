@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using MySearchEngine.Algorithms.Extensions;
+using MySearchEngine.Core.Extensions;
 using System.Linq;
 
-namespace MySearchEngine.Algorithms.Tests.Extensions
+namespace MySearchEngine.Core.Tests.Extensions
 {
     [TestClass]
     public class StringExtensionTests

@@ -1,4 +1,4 @@
-﻿using MySearchEngine.Algorithms.Extensions;
+﻿using MySearchEngine.Core.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

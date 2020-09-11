@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MySearchEngine.Algorithms.Extensions
+namespace MySearchEngine.Core.Extensions
 {
     public static class StringExtension
     {

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("MySearchEngine.Algorithms.Tests")]
 
-namespace MySearchEngine.Algorithms
+namespace MySearchEngine.Core
 {
     internal class TrieNode
     {

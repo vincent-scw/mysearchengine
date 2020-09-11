@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30104.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.WebCrawler", "src\MySearchEngine.WebCrawler\MySearchEngine.WebCrawler.csproj", "{003BB5BC-C431-4E74-A222-79ED121366BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Algorithms", "src\MySearchEngine.Algorithms\MySearchEngine.Algorithms.csproj", "{D7C4FDD4-78F7-40C4-BB85-0BCC1CB1BEC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Core", "src\MySearchEngine.Core\MySearchEngine.Core.csproj", "{D7C4FDD4-78F7-40C4-BB85-0BCC1CB1BEC8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7BCAAEA9-86AB-4288-8447-47579BFE55AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7D0FA138-EF52-4FCB-9C78-E12E62779EFA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Algorithms.Tests", "test\MySearchEngine.Algorithms.Tests\MySearchEngine.Algorithms.Tests.csproj", "{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Core.Tests", "test\MySearchEngine.Core.Tests\MySearchEngine.Core.Tests.csproj", "{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.Repository", "src\MySearchEngine.Repository\MySearchEngine.Repository.csproj", "{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}"
 EndProject

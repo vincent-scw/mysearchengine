@@ -2,12 +2,14 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using MySearchEngine.Core;
 
 namespace MySearchEngine.Repository
 {
     public class DictionaryCrawledRepository : ICrawledRepository
     {
-        private readonly ConcurrentDictionary<int, byte> _repository = new ConcurrentDictionary<int, byte>();
+        private readonly IIdGenerator<int> _pageIdGenerator;
+        private readonly ConcurrentDictionary<int, int> _repository = new ConcurrentDictionary<int, int>();
 
         public bool AddIfNew(Uri uri)
         {
