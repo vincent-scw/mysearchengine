@@ -1,7 +1,10 @@
 ﻿using MySearchEngine.Core.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+
+[assembly: InternalsVisibleTo("MySearchEngine.WebCrawler.Tests")]
 
 namespace MySearchEngine.WebCrawler.Core
 {
@@ -54,11 +57,11 @@ namespace MySearchEngine.WebCrawler.Core
                         continue;
                     }
                     // Remove not display content
-                    sb.Append(htmlContent[index..position]);
+                    sb.Append(htmlContent[index..position].TrimEnd());
 
                     var removeValue = removeList[value];
                     var removeTo = removeValue == string.Empty ? position + value.Length : htmlContent.IndexOf(removeValue, startIndex) + removeValue.Length;
-                    //sb.Append(' ');
+                    sb.Append(' ');
 
                     index = removeTo;
                 }
@@ -84,7 +87,8 @@ namespace MySearchEngine.WebCrawler.Core
                 if (index > position)
                     continue;
 
-                sb.Append(htmlContent[index..position]);
+                sb.Append(htmlContent[index..position].TrimEnd());
+                sb.Append(' ');
 
                 index = htmlContent.IndexOf(">", position + value.Length) + 1;
             }
