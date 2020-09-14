@@ -16,6 +16,7 @@ namespace MySearchEngine.WebCrawler.Core
         {
             {"<![CDATA[", string.Empty},
             {"]]>", string.Empty},
+            {"[&hellip;]",string.Empty},
             {"<style", "</style>"},
             {"<script", "</script>"},
             {"<option", "</option>"},
@@ -48,14 +49,18 @@ namespace MySearchEngine.WebCrawler.Core
                 }
                 else
                 {
-                    if (index <= position)
+                    if (index > position)
                     {
-                        // Remove not display content
-                        sb.Append(htmlContent[index..position]);
+                        continue;
                     }
+                    // Remove not display content
+                    sb.Append(htmlContent[index..position]);
 
                     var removeValue = removeList[value];
-                    index = htmlContent.IndexOf(removeValue, startIndex) + removeValue.Length;
+                    var removeTo = removeValue == string.Empty ? position + value.Length : htmlContent.IndexOf(removeValue, startIndex) + removeValue.Length;
+                    //sb.Append(' ');
+
+                    index = removeTo;
                 }
             }
 
@@ -76,8 +81,10 @@ namespace MySearchEngine.WebCrawler.Core
             var index = 0;
             foreach (var (position, value) in foundList)
             {
-                if (index <= position)
-                    sb.Append(htmlContent[index..position]);
+                if (index > position)
+                    continue;
+
+                sb.Append(htmlContent[index..position]);
 
                 index = htmlContent.IndexOf(">", position + value.Length) + 1;
             }

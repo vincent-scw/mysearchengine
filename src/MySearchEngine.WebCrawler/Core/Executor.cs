@@ -25,6 +25,7 @@ namespace MySearchEngine.WebCrawler.Core
         private readonly IIndexRepository _indexRepository;
 
         private readonly IIdGenerator<int> _termIdGenerator;
+        private readonly IIdGenerator<int> _pageIdGenerator;
 
         public Executor(
             IPageDownloader downloader,
@@ -36,6 +37,7 @@ namespace MySearchEngine.WebCrawler.Core
             _indexRepository = indexRepository ?? throw new ArgumentNullException(nameof(IIndexRepository));
 
             _termIdGenerator = new IntegerIdGenerator();
+            _pageIdGenerator = new IntegerIdGenerator();
 
             // Build data flow
             _bufferBlock = new BufferBlock<Uri>();

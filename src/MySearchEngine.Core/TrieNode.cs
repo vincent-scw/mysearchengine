@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MySearchEngine.Algorithms.Tests")]
+[assembly: InternalsVisibleTo("MySearchEngine.Core.Tests")]
 
 namespace MySearchEngine.Core
 {
@@ -12,6 +12,7 @@ namespace MySearchEngine.Core
         public bool IsEndingChar { get; set; }
         public IDictionary<char, TrieNode> Children { get; private set; }
         public TrieNode Fail { get; set; }
+        public int VisitCount { get; set; }
 
         public TrieNode(char data, int previousLength)
         {
