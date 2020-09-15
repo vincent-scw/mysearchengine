@@ -9,11 +9,12 @@ namespace MySearchEngine.Core
 {
     internal class DocumentTrie
     {
+        private const string WORD_SPLIT = " .,!\"";
         internal TrieNode Root { get; private set; }
 
         public DocumentTrie()
         {
-            Root = new TrieNode('~', -1); // Any meaningless char is OK here
+            Root = new TrieNode('~', string.Empty, true);
         }
 
         public void BuildTrie(string document)
@@ -21,14 +22,19 @@ namespace MySearchEngine.Core
             var p = Root;
             for (int i = 0; i < document.Length; i++)
             {
-                if (char.IsLetterOrDigit(document[i]))
+                if (WORD_SPLIT.IndexOf(document[i]) < 0)
                 {
                     p = p.GetOrAppend(document[i]);
-                    if (i < document.Length - 1 && !char.IsLetterOrDigit(document[i + 1]))
-                    {
-                        p.IsEndingChar = true;
-                        p.VisitCount++;
-                    }
+                }
+                else
+                {
+                    p = Root;
+                }
+
+                if (i < document.Length - 1 && WORD_SPLIT.IndexOf(document[i + 1]) >= 0)
+                {
+                    p.IsEndingChar = true;
+                    p.VisitedCount++;
                 }
             }
         }

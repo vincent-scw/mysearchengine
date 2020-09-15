@@ -12,7 +12,7 @@ namespace MySearchEngine.Core
 
         public AcPatternMatcher(IEnumerable<string> terms)
         {
-            Root = new TrieNode('~', -1); // Any meaningless char is OK here
+            Root = new TrieNode('~', string.Empty, true);
             foreach (var term in terms)
             {
                 Insert(term);
@@ -140,7 +140,7 @@ namespace MySearchEngine.Core
                         var q = p.Fail;
                         while (q != null)
                         {
-                            q.Children.TryGetValue(pc.Data, out TrieNode qc);
+                            q.Children.TryGetValue(pc.Char, out TrieNode qc);
                             if (qc != null)
                             {
                                 pc.Fail = qc;

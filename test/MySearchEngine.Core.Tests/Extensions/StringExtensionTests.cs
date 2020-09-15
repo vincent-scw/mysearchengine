@@ -51,5 +51,14 @@ try Deep Learning by Ian Goodfellow, Yoshua Bengio, and Aaron Courville.";
             Assert.AreEqual(5, results.Where(x => x.value == "机器学习").Count());
             Assert.AreEqual(4, results.Where(x => x.value == "人工智能").Count());
         }
+
+        [TestMethod]
+        public void Visit_Should_ReturnExpected()
+        {
+            var results = @"It's my story about MY life.".Visit();
+
+            Assert.AreEqual(5, results.Count());
+            Assert.AreEqual(2, results.Single(x => x.term == "my").visitedCount);
+        }
     }
 }

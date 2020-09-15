@@ -7,17 +7,20 @@ namespace MySearchEngine.Core
 {
     internal class TrieNode
     {
-        public char Data { get; }
-        public int Length { get; }
+        public char Char { get; }
+        public string Data { get; }
+        public int Length => Data.Length;
         public bool IsEndingChar { get; set; }
         public IDictionary<char, TrieNode> Children { get; private set; }
         public TrieNode Fail { get; set; }
-        public int VisitCount { get; set; }
+        public int VisitedCount { get; set; }
+        public bool IsRoot { get; }
 
-        public TrieNode(char data, int previousLength)
+        public TrieNode(char c, string previousData, bool isRoot = false)
         {
-            Data = data;
-            Length = previousLength + 1;
+            Char = c;
+            IsRoot = isRoot;
+            Data = isRoot ? string.Empty : previousData + c;
             Children = new Dictionary<char, TrieNode>();
         }
 
@@ -27,7 +30,7 @@ namespace MySearchEngine.Core
             var found = Children.TryGetValue(lowered, out TrieNode tnext);
             if (!found)
             {
-                tnext = new TrieNode(lowered, Length);
+                tnext = new TrieNode(lowered, Data);
                 Children.Add(lowered, tnext);
             }
 
