@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("MySearchEngine.Core.Tests")]
+﻿using System.Collections.Generic;
 
 namespace MySearchEngine.Core
 {

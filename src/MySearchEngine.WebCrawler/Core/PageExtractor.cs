@@ -10,12 +10,12 @@ namespace MySearchEngine.WebCrawler.Core
 {
     internal class PageExtractor : IPageExtractor
     {
-        private static IDictionary<string, string> linkList = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> linkList = new Dictionary<string, string>
         {
             {"href=\"", "\""}
         };
 
-        private static IDictionary<string, string> removeList = new Dictionary<string, string>
+        private static readonly IDictionary<string, string> removeList = new Dictionary<string, string>
         {
             {"<![CDATA[", string.Empty},
             {"]]>", string.Empty},

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-
-[assembly: InternalsVisibleTo("MySearchEngine.Core.Tests")]
-
-namespace MySearchEngine.Core
+﻿namespace MySearchEngine.Core
 {
     internal class DocumentTrie
     {
