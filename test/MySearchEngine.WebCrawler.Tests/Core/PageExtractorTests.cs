@@ -14,7 +14,7 @@ namespace MySearchEngine.WebCrawler.Tests.Core
         public void ExtractLinks_Should_Succeed()
         {
             var extractor = new PageExtractor();
-            var pageInfo = extractor.Extract("<link href=\"https:\\\\website.com\"");
+            var pageInfo = extractor.Extract("<a href=\"https:\\\\website.com\">somewhere</a>");
 
             Assert.AreEqual(1, pageInfo.links.Count());
             Assert.AreEqual("https:\\\\website.com", pageInfo.links.First());
