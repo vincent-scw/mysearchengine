@@ -51,10 +51,10 @@ namespace MySearchEngine.WebCrawler.Core
                                 // Get href in links
                                 do
                                 {
-                                    if (htmlContent.Substring(index, HrefAttr.Length) == HrefAttr)
+                                    if (htmlContent[index..(index + HrefAttr.Length)] == HrefAttr)
                                     {
                                         var startIndex = index + HrefAttr.Length + 1; // start index should be "
-                                        var link = htmlContent.Substring(startIndex, htmlContent.IndexOf('\"', startIndex) - startIndex);
+                                        var link = htmlContent[startIndex..htmlContent.IndexOf('\"', startIndex)];
                                         links.Add(link);
                                     }
 
