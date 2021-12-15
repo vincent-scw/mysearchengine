@@ -2,7 +2,7 @@
 
 namespace MySearchEngine.Analyzer.Tokenizers
 {
-    public struct Token
+    public class Token
     {
         public int Id { get; set; }
         public string Term { get; set; }

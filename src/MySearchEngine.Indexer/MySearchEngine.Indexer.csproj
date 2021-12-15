@@ -9,4 +9,10 @@
     <ProjectReference Include="..\MySearchEngine.Analyzer\MySearchEngine.Analyzer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="stop_words_english.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

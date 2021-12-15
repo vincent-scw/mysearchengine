@@ -2,6 +2,6 @@
 {
     public interface IIdGenerator<TId>
     {
-        TId Next(string seed);
+        TId Next(string parameter);
     }
 }
