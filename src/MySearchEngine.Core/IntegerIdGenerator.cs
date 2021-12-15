@@ -10,7 +10,7 @@ namespace MySearchEngine.Core
             _currentId = 0;
         }
 
-        public int Next()
+        public int Next(string seed)
         {
             return Interlocked.Increment(ref _currentId);
         }

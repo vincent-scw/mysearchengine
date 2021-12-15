@@ -24,16 +24,18 @@ namespace MySearchEngine.Analyzer
 
         public IEnumerable<Token> Analyze(string text)
         {
-            var analyzedText = text;
+            var filteredText = text;
             if (_characterFilters?.Count > 0)
             {
                 foreach (var characterFilter in _characterFilters)
                 {
-                    analyzedText = characterFilter.Filter(analyzedText);
+                    filteredText = characterFilter.Filter(filteredText);
                 }
             }
 
-            return null;
+            var tokens = _tokenizer.Tokenize(filteredText);
+
+            return tokens;
         }
     }
 }

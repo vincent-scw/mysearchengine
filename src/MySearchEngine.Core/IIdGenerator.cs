@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MySearchEngine.Core
+﻿namespace MySearchEngine.Core
 {
     public interface IIdGenerator<TId>
     {
-        TId Next();
+        TId Next(string seed);
     }
 }
