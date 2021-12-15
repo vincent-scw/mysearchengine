@@ -35,7 +35,7 @@ namespace MySearchEngine.WebCrawler
             var services = new ServiceCollection();
             services.AddSingleton<IPageDownloader, PageDownloader>();
             services.AddSingleton<IPageExtractor, PageExtractor>();
-            services.AddSingleton<ICrawledRepository, DictionaryCrawledRepository>();
+            services.AddSingleton<IPageInfoRepository, DictionaryPageInfoRepository>();
             services.AddSingleton<IIndexRepository, IndexRepository>();
             services.AddSingleton<Executor>();
             services.AddSingleton<CrawlerConfig>();

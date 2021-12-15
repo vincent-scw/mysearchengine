@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MySearchEngine.Repository
 {
-    public class DictionaryCrawledRepository : ICrawledRepository
+    public class DictionaryPageInfoRepository : IPageInfoRepository
     {
         private readonly ConcurrentDictionary<int, int> _repository = new ConcurrentDictionary<int, int>();
 

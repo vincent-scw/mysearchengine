@@ -18,5 +18,6 @@ namespace MySearchEngine.WebCrawler.Models
         public string OriginContent { get; set; }
         public string PurifiedContent { get; set; }
         public bool Analyzable { get; set; }
+        public bool Crawled => PurifiedContent != null;
     }
 }

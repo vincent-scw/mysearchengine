@@ -2,7 +2,7 @@
 
 namespace MySearchEngine.Repository
 {
-    public interface ICrawledRepository
+    public interface IPageInfoRepository
     {
         bool Exists(Uri uri);
         bool AddIfNew(Uri uri);

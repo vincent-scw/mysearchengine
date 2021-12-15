@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MySearchEngine.Repository
 {
-    public class BloomFilterCrawledRepository : ICrawledRepository
+    public class BloomFilterCrawledRepository : IPageInfoRepository
     {
         public bool AddIfNew(Uri uri)
         {

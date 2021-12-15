@@ -13,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7D0FA138-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Core.Tests", "test\MySearchEngine.Core.Tests\MySearchEngine.Core.Tests.csproj", "{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.Repository", "src\MySearchEngine.Repository\MySearchEngine.Repository.csproj", "{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Repository", "src\MySearchEngine.Repository\MySearchEngine.Repository.csproj", "{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.WebCrawler.Tests", "test\MySearchEngine.WebCrawler.Tests\MySearchEngine.WebCrawler.Tests.csproj", "{9D6D9F6E-A9AA-4BF6-B163-05A596221812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.WebCrawler.Tests", "test\MySearchEngine.WebCrawler.Tests\MySearchEngine.WebCrawler.Tests.csproj", "{9D6D9F6E-A9AA-4BF6-B163-05A596221812}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
