@@ -12,9 +12,9 @@ namespace MySearchEngine.Analyzer.TokenFilters
             _stopWordList = stopWordList.ToList();
         }
 
-        public void Filter(List<Token> tokens)
+        public List<Token> Filter(List<Token> tokens)
         {
-            throw new System.NotImplementedException();
+            return tokens.Where(x => !_stopWordList.Contains(x.Term)).ToList();
         }
     }
 }

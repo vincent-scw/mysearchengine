@@ -5,6 +5,6 @@ namespace MySearchEngine.Analyzer.TokenFilters
 {
     public interface ITokenFilter
     {
-        void Filter(List<Token> tokens);
+        List<Token> Filter(List<Token> tokens);
     }
 }

@@ -5,7 +5,7 @@ namespace MySearchEngine.Analyzer.TokenFilters
 {
     class SynonymTokenFilter : ITokenFilter
     {
-        public void Filter(List<Token> tokens)
+        public List<Token> Filter(List<Token> tokens)
         {
             throw new System.NotImplementedException();
         }

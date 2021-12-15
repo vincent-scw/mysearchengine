@@ -19,7 +19,7 @@ namespace MySearchEngine.Analyzer.Tests.TokenFilters
                 new Token(3, "A_B"), 
                 new Token(4, "StringExt")
             };
-            tokenFilter.Filter(tokenList);
+            tokenList = tokenFilter.Filter(tokenList);
 
             Assert.Equal("some|any|a_b|stringext", string.Join('|', tokenList.Select(x => x.Term).ToArray()));
         }

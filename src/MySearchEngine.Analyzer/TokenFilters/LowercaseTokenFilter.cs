@@ -1,16 +1,14 @@
-﻿using System;
+﻿using MySearchEngine.Analyzer.Tokenizers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MySearchEngine.Analyzer.Tokenizers;
 
 namespace MySearchEngine.Analyzer.TokenFilters
 {
     class LowercaseTokenFilter : ITokenFilter
     {
-        public void Filter(List<Token> tokens)
+        public List<Token> Filter(List<Token> tokens)
         {
             tokens.ForEach(t => t.Term = t.Term.ToLower());
+            return tokens;
         }
     }
 }
