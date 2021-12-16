@@ -15,7 +15,10 @@ namespace MySearchEngine.Analyzer.TokenFilters
             var newTokens = tokens.GroupBy(x => x.Term).Select(x =>
             {
                 var t = x.First();
-                return new Token(t.Id, t.Term) {Positions = x.SelectMany(tk => tk.Positions).ToList()};
+                return x.Count() == 1 ? t : new Token(t.Id, t.Term)
+                {
+                    Positions = x.SelectMany(tk => tk.Positions).ToList()
+                };
             });
             return newTokens.ToList();
         }
