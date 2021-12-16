@@ -1,26 +1,22 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MySearchEngine.WebCrawler.Core;
-using System;
-using System.Collections.Generic;
+﻿using MySearchEngine.WebCrawler.Core;
 using System.Linq;
-using System.Text;
+using Xunit;
 
 namespace MySearchEngine.WebCrawler.Tests.Core
 {
-    [TestClass]
     public class PageExtractorTests
     {
-        [TestMethod]
+        [Fact]
         public void ExtractLinks_Should_Succeed()
         {
             var extractor = new PageExtractor();
             var pageInfo = extractor.Extract("<a href=\"https:\\\\website.com\">somewhere</a>");
 
-            Assert.AreEqual(1, pageInfo.links.Count());
-            Assert.AreEqual("https:\\\\website.com", pageInfo.links.First());
+            Assert.Equal(1, pageInfo.links.Count());
+            Assert.Equal("https:\\\\website.com", pageInfo.links.First());
         }
 
-        [TestMethod]
+        [Fact]
         public void ExtractContent_Should_AsExpected()
         {
             var extractor = new PageExtractor();
@@ -36,7 +32,7 @@ namespace MySearchEngine.WebCrawler.Tests.Core
 </html>
 ");
 
-            Assert.AreEqual("Something", pageInfo.content.Trim());
+            Assert.Equal("Something", pageInfo.content.Trim());
         }
     }
 }

@@ -1,13 +1,12 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
 namespace MySearchEngine.Core.Tests
 {
-    [TestClass]
     public class AcPatternMatcherTests
     {
-        [TestMethod]
+        [Fact]
         public void TrieExists_Should_ReturnExpected()
         {
             var trie = new AcPatternMatcher(new List<string>
@@ -20,19 +19,19 @@ namespace MySearchEngine.Core.Tests
                 "see"
             });
 
-            Assert.IsTrue(trie.Exists("how"));
-            Assert.IsTrue(trie.Exists("hi"));
-            Assert.IsTrue(trie.Exists("HER"));
-            Assert.IsTrue(trie.Exists("Hello"));
-            Assert.IsTrue(trie.Exists("so"));
-            Assert.IsTrue(trie.Exists("See"));
+            Assert.True(trie.Exists("how"));
+            Assert.True(trie.Exists("hi"));
+            Assert.True(trie.Exists("HER"));
+            Assert.True(trie.Exists("Hello"));
+            Assert.True(trie.Exists("so"));
+            Assert.True(trie.Exists("See"));
 
-            Assert.IsFalse(trie.Exists("HERE"));
-            Assert.IsFalse(trie.Exists("he"));
-            Assert.IsFalse(trie.Exists("she"));
+            Assert.False(trie.Exists("HERE"));
+            Assert.False(trie.Exists("he"));
+            Assert.False(trie.Exists("she"));
         }
 
-        [TestMethod]
+        [Fact]
         public void TrieSearch_Should_ReturnExpected()
         {
             var trie = new AcPatternMatcher(new List<string>
@@ -46,11 +45,11 @@ namespace MySearchEngine.Core.Tests
 
             var ret = trie.Match("dd abdbc cd zzzz").ToArray();
 
-            Assert.AreEqual(4, ret.Length);
-            Assert.AreEqual((6, "bc"), ret[0]);
-            Assert.AreEqual((7, "c"), ret[1]);
-            Assert.AreEqual((9, "c"), ret[2]);
-            Assert.AreEqual((6, "bc cd"), ret[3]);
+            Assert.Equal(4, ret.Length);
+            Assert.Equal((6, "bc"), ret[0]);
+            Assert.Equal((7, "c"), ret[1]);
+            Assert.Equal((9, "c"), ret[2]);
+            Assert.Equal((6, "bc cd"), ret[3]);
         }
     }
 }
