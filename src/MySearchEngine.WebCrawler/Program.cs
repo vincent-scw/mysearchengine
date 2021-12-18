@@ -1,58 +1,39 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using MySearchEngine.WebCrawler.Core;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using MySearchEngine.Repository;
-using MySearchEngine.WebCrawler.Core;
 
 namespace MySearchEngine.WebCrawler
 {
     class Program
     {
-        private static IServiceProvider _serviceProvider;
-
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Start crawling...press any key to cancel...");
-            RegisterServices();
+            var host = CreateHostBuilder(args).Build();
+            Console.WriteLine("Input url to start...");
+            var url = Console.ReadLine();
 
             var cancellationToken = new CancellationTokenSource();
+            var ps = host.Services.GetRequiredService<IProcessingService>();
+            ps.DoWork(url, cancellationToken.Token);
 
-            var executor = _serviceProvider.GetService<Executor>();
-            await executor.StartAsync(new Uri("https://www.differencebetween.com/"), cancellationToken.Token);
-
-            Console.ReadLine();
-            cancellationToken.Cancel();
-
-            Console.WriteLine("Processing cancelled.");
-
-            DisposeServices();
-            Console.ReadLine();
+            await host.RunAsync();
         }
 
-        private static void RegisterServices()
+        static IHostBuilder CreateHostBuilder(string[] args)
         {
-            var services = new ServiceCollection();
-            services.AddSingleton<IPageDownloader, PageDownloader>();
-            services.AddSingleton<IPageExtractor, PageExtractor>();
-            services.AddSingleton<IPageInfoRepository, DictionaryPageInfoRepository>();
-            services.AddSingleton<IIndexRepository, IndexRepository>();
-            services.AddSingleton<Executor>();
-            services.AddSingleton<CrawlerConfig>();
-
-            _serviceProvider = services.BuildServiceProvider(true);
-        }
-
-        private static void DisposeServices()
-        {
-            if (_serviceProvider == null)
-            {
-                return;
-            }
-            if (_serviceProvider is IDisposable)
-            {
-                ((IDisposable)_serviceProvider).Dispose();
-            }
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddSingleton<IProcessingService, CrawlProcessingService>();
+                    
+                    services.AddSingleton<IPageReader, PageReader>();
+                    services.AddSingleton<IPageExtractor, PageExtractor>();
+                    services.AddSingleton<Executor>();
+                    services.AddSingleton<CrawlerConfig>();
+                });
         }
     }
 }

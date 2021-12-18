@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace MySearchEngine.QueueService
@@ -16,7 +15,13 @@ namespace MySearchEngine.QueueService
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    //services.AddGrpc();
+                    services.AddSingleton(new HostConfiguration()
+                    {
+                        Host = "localhost",
+                        ControlPort = 10024
+                    });
+
+                    services.AddHostedService<QueuedHostedService>();
                 });
         }
     }

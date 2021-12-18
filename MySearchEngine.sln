@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7D0FA138-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Core.Tests", "test\MySearchEngine.Core.Tests\MySearchEngine.Core.Tests.csproj", "{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Repository", "src\MySearchEngine.Repository\MySearchEngine.Repository.csproj", "{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.WebCrawler.Tests", "test\MySearchEngine.WebCrawler.Tests\MySearchEngine.WebCrawler.Tests.csproj", "{9D6D9F6E-A9AA-4BF6-B163-05A596221812}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Indexer", "src\MySearchEngine.Indexer\MySearchEngine.Indexer.csproj", "{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF}"
@@ -23,11 +21,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Analyzer", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Analyzer.Tests", "test\MySearchEngine.Analyzer.Tests\MySearchEngine.Analyzer.Tests.csproj", "{FF942F18-A80E-4509-8595-780726A54D13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.QueueService", "src\MySearchEngine.QueueService\MySearchEngine.QueueService.csproj", "{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.QueueService", "src\MySearchEngine.QueueService\MySearchEngine.QueueService.csproj", "{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{2C568677-2D32-4CCF-9E62-D203350F41B1}"
 	ProjectSection(SolutionItems) = preProject
 		res\qctrl.proto = res\qctrl.proto
+		res\stop_words_english.json = res\stop_words_english.json
 	EndProjectSection
 EndProject
 Global
@@ -48,10 +47,6 @@ Global
 		{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -80,7 +75,6 @@ Global
 		{003BB5BC-C431-4E74-A222-79ED121366BC} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{D7C4FDD4-78F7-40C4-BB85-0BCC1CB1BEC8} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF} = {7D0FA138-EF52-4FCB-9C78-E12E62779EFA}
-		{84CB4FEF-6BDF-47B0-AED3-D70D5D52853B} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812} = {7D0FA138-EF52-4FCB-9C78-E12E62779EFA}
 		{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{9D0F5AAC-45EB-457C-A85C-5548C07F0291} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}

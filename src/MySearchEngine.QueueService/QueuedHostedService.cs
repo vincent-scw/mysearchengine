@@ -4,19 +4,21 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using Qctrl;
 
 namespace MySearchEngine.QueueService
 {
     sealed class QueuedHostedService : BackgroundService
     {
-        private readonly IBackgroundQueue _queue;
+        private readonly HostConfiguration _config;
         private readonly ILogger<QueuedHostedService> _logger;
 
         public QueuedHostedService(
-            IBackgroundQueue queue,
+            HostConfiguration config,
             ILogger<QueuedHostedService> logger) =>
-            (_queue, _logger) = (queue, logger);
+            (_config, _logger) = (config, logger);
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -26,10 +28,20 @@ namespace MySearchEngine.QueueService
 
         private async Task ProcessQueueAsync(CancellationToken cancellationToken)
         {
+            var server = new Server()
+            {
+                Services = { QueueClient.BindService(new QueueClientImpl(_logger)) },
+                Ports = { new ServerPort(_config.Host, _config.ControlPort, ServerCredentials.Insecure)}
+            };
+            server.Start();
+
             while (!cancellationToken.IsCancellationRequested)
             {
-
+                // keep server running
             }
+
+            _logger.LogInformation($"{nameof(QueuedHostedService)} is shutting down.");
+            await server.ShutdownAsync();
         }
     }
 }

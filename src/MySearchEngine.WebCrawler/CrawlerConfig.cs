@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MySearchEngine.WebCrawler
 {
     public class CrawlerConfig
     {
-        public IEnumerable<string> AllowedMediaTypes => new List<string> { "text/html" };
+        public List<string> AllowedMediaTypes => new List<string> { "text/html" };
+        public List<string> ExcludeLinkSuffix => new List<string> {".css", ".js"};
     }
 }
