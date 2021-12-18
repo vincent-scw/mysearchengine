@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MySearchEngine.WebCrawler.Core;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Grpc.Core;
+using MySearchEngine.Core;
+using Qctrl;
 
 namespace MySearchEngine.WebCrawler
 {
@@ -28,11 +30,11 @@ namespace MySearchEngine.WebCrawler
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IProcessingService, CrawlProcessingService>();
-                    
                     services.AddSingleton<IPageReader, PageReader>();
-                    services.AddSingleton<IPageExtractor, PageExtractor>();
-                    services.AddSingleton<Executor>();
                     services.AddSingleton<CrawlerConfig>();
+                    services.AddSingleton((sp) =>
+                        new QueueSvc.QueueSvcClient(new Channel("localhost", 10024, ChannelCredentials.Insecure)));
+                    services.AddSingleton<IIdGenerator<int>, IntegerIdGenerator>();
                 });
         }
     }

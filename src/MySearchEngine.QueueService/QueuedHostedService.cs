@@ -30,10 +30,11 @@ namespace MySearchEngine.QueueService
         {
             var server = new Server()
             {
-                Services = { QueueClient.BindService(new QueueClientImpl(_logger)) },
+                Services = { QueueSvc.BindService(new QueueSvcImpl(_logger)) },
                 Ports = { new ServerPort(_config.Host, _config.ControlPort, ServerCredentials.Insecure)}
             };
             server.Start();
+            _logger.LogInformation("gRPC server started.");
 
             while (!cancellationToken.IsCancellationRequested)
             {
