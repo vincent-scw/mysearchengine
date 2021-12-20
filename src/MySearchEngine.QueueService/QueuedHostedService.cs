@@ -17,7 +17,7 @@ namespace MySearchEngine.QueueService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine($"{nameof(QueuedHostedService)} is running.");
+            Console.WriteLine($"{nameof(QueuedHostedService)} is running on {_config.Host}:{_config.ControlPort}.");
             return ProcessQueueAsync(stoppingToken);
         }
 

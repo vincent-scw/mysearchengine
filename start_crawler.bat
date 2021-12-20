@@ -1,0 +1,1 @@
+dotnet src\MySearchEngine.WebCrawler\bin\Debug\net5.0\MySearchEngine.WebCrawler.dll localhost 10024

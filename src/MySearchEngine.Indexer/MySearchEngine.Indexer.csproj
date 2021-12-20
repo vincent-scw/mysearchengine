@@ -6,6 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.14.0" />
+    <PackageReference Include="Grpc" Version="2.35.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.36.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\..\res\qctrl.proto" GrpcServices="Client" Access="Internal">
+      <Link>qctrl.proto</Link>
+    </Protobuf>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MySearchEngine.Core\MySearchEngine.Core.csproj" />
   </ItemGroup>
 
