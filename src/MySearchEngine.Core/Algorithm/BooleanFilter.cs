@@ -20,7 +20,7 @@ namespace MySearchEngine.Core.Algorithm
         public bool TryAdd(string str)
         {
             var bytes = ASCIIEncoding.ASCII.GetBytes(str);
-            var hash1 = Math.Abs(str.GetHashCode() & _bArray.Length);
+            var hash1 = Math.Abs(str.GetHashCode() % _bArray.Length);
             var hash2 = ToSHA256Hash(bytes);
             var hash3 = ToMD5Hash(bytes);
 

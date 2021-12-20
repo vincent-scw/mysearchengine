@@ -1,19 +1,23 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Grpc.Core;
-using MySearchEngine.Core;
 using MySearchEngine.Core.Utilities;
 using Qctrl;
+using System;
+using System.Threading;
 
 namespace MySearchEngine.WebCrawler
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Arguments required. \"[host] [port]\"");
+                return;
+            }
+
             var host = CreateHostBuilder(args).Build();
             Console.WriteLine("Input url to start...");
             var url = Console.ReadLine();
@@ -22,7 +26,11 @@ namespace MySearchEngine.WebCrawler
             var ps = host.Services.GetRequiredService<IProcessingService>();
             ps.DoWork(url, cancellationToken.Token);
 
-            await host.RunAsync();
+            host.RunAsync();
+
+            Console.ReadLine();
+            Console.WriteLine("About to end...");
+            cancellationToken.Cancel();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args)
@@ -34,7 +42,7 @@ namespace MySearchEngine.WebCrawler
                     services.AddSingleton<IPageReader, PageReader>();
                     services.AddSingleton<CrawlerConfig>();
                     services.AddSingleton((sp) =>
-                        new QueueSvc.QueueSvcClient(new Channel("localhost", 10024, ChannelCredentials.Insecure)));
+                        new QueueSvc.QueueSvcClient(new Channel(args[0], Convert.ToInt32(args[1]), ChannelCredentials.Insecure)));
                     services.AddSingleton<IIdGenerator<int>, IntegerIdGenerator>();
                 });
         }

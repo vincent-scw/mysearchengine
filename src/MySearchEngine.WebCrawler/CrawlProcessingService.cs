@@ -1,11 +1,11 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
-using Google.Protobuf.WellKnownTypes;
-using MySearchEngine.Core;
+﻿using Google.Protobuf.WellKnownTypes;
+using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Utilities;
 using Qctrl;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MySearchEngine.WebCrawler
 {
@@ -14,34 +14,62 @@ namespace MySearchEngine.WebCrawler
         private readonly IPageReader _pageReader;
         private readonly IIdGenerator<int> _idGenerator;
         private readonly QueueSvc.QueueSvcClient _queueClient;
-        private readonly ILogger<CrawlProcessingService> _logger;
+        private readonly BooleanFilter _booleanFilter;
+
         public CrawlProcessingService(
             IPageReader pageReader,
             IIdGenerator<int> idGenerator,
-            QueueSvc.QueueSvcClient queueCient,
-            ILogger<CrawlProcessingService> logger)
+            QueueSvc.QueueSvcClient queueClient)
         {
             _pageReader = pageReader;
             _idGenerator = idGenerator;
-            _queueClient = queueCient;
-            _logger = logger;
+            _queueClient = queueClient;
+            _booleanFilter = new BooleanFilter(100_000);
         }
 
-        public void DoWork(string uri, CancellationToken cancellationToken)
+        public void DoWork(string url, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"{nameof(CrawlProcessingService)} started...");
-            Task.Run(async () => await CrawlAsync(uri));
+            Console.WriteLine($"{nameof(CrawlProcessingService)} started...");
+            Task.Run(async () => await CrawlAsync(url, cancellationToken));
         }
 
-        private async ValueTask CrawlAsync(string uri)
+        private async ValueTask CrawlAsync(string url, CancellationToken cancellationToken)
         {
-            var pi = await _pageReader.ReadAsync(new Uri(uri));
+            if (cancellationToken.IsCancellationRequested)
+                return;
+
+            var links = await HandleOneAsync(url);
+            if(links == null)
+                return;
+            
+            foreach (var link in links)
+            {
+                if (!_booleanFilter.TryAdd(link))
+                    continue;
+
+                await CrawlAsync(link, cancellationToken);
+            }
+        }
+
+        private async Task<List<string>> HandleOneAsync(string url)
+        {
+            Console.Write($"Reading page at: {url}");
+            var pi = await _pageReader.ReadAsync(new Uri(url));
+            if (pi == null)
+            {
+                Console.WriteLine("  Ignored.");
+                return null;
+            }
+
             await _queueClient.EnqueueAsync(new Message()
             {
                 Id = _idGenerator.Next(null),
                 Body = pi.Content,
                 Timestamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
             });
+
+            Console.WriteLine("  Done.");
+            return pi.Links;
         }
     }
 }

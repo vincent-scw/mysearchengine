@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace MySearchEngine.QueueService
@@ -7,6 +8,12 @@ namespace MySearchEngine.QueueService
     {
         static void Main(string[] args)
         {
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Arguments required. \"[host] [port]\"");
+                return;
+            }
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -17,8 +24,8 @@ namespace MySearchEngine.QueueService
                 {
                     services.AddSingleton(new HostConfiguration()
                     {
-                        Host = "localhost",
-                        ControlPort = 10024
+                        Host = args[0],
+                        ControlPort = Convert.ToInt32(args[1])
                     });
 
                     services.AddHostedService<QueuedHostedService>();

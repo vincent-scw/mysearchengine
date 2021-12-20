@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MySearchEngine.WebCrawler
 {
     internal class PageReader : IPageReader, IDisposable
     {
+        private const string LinkPattern = "(http|ftp|https):\\/\\/([\\w_-]+(?:(?:\\.[\\w_-]+)+))([\\w.,@?^=%&:\\/~+#-]*[\\w@?^=%&\\/~+#-])";
+
         private readonly HttpClient _httpClient;
         private readonly CrawlerConfig _config;
         public PageReader(CrawlerConfig config)
@@ -33,9 +37,13 @@ namespace MySearchEngine.WebCrawler
             _httpClient?.Dispose();
         }
 
-        private static List<string> ReadLinks(string content)
+        private List<string> ReadLinks(string content)
         {
-            return null;
+            var regex = new Regex(LinkPattern);
+            var matches = regex.Matches(content).Select(x => x.Value);
+
+            return matches.Where(match => match.StartsWith(_config.CrawlLinkPrefix)
+                                          && !_config.ExcludeLinkSuffix.Any(match.EndsWith)).ToList();
         }
     }
 }

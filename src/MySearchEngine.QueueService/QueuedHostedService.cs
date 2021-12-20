@@ -1,28 +1,23 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Grpc.Core;
+using Microsoft.Extensions.Hosting;
+using Qctrl;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Grpc.Core;
-using Microsoft.Extensions.Logging;
-using Qctrl;
 
 namespace MySearchEngine.QueueService
 {
     sealed class QueuedHostedService : BackgroundService
     {
         private readonly HostConfiguration _config;
-        private readonly ILogger<QueuedHostedService> _logger;
 
         public QueuedHostedService(
-            HostConfiguration config,
-            ILogger<QueuedHostedService> logger) =>
-            (_config, _logger) = (config, logger);
+            HostConfiguration config) =>
+            (_config) = (config);
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation($"{nameof(QueuedHostedService)} is running.");
+            Console.WriteLine($"{nameof(QueuedHostedService)} is running.");
             return ProcessQueueAsync(stoppingToken);
         }
 
@@ -30,18 +25,18 @@ namespace MySearchEngine.QueueService
         {
             var server = new Server()
             {
-                Services = { QueueSvc.BindService(new QueueSvcImpl(_logger)) },
+                Services = { QueueSvc.BindService(new QueueSvcImpl()) },
                 Ports = { new ServerPort(_config.Host, _config.ControlPort, ServerCredentials.Insecure)}
             };
             server.Start();
-            _logger.LogInformation("gRPC server started.");
+            Console.WriteLine("gRPC server started.");
 
             while (!cancellationToken.IsCancellationRequested)
             {
                 // keep server running
             }
 
-            _logger.LogInformation($"{nameof(QueuedHostedService)} is shutting down.");
+            Console.WriteLine($"{nameof(QueuedHostedService)} is shutting down.");
             await server.ShutdownAsync();
         }
     }
