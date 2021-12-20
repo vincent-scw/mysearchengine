@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MySearchEngine.Core.Algorithm;
 
 namespace MySearchEngine.Core.Extensions
 {

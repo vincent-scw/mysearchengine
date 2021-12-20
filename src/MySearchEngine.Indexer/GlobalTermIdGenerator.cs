@@ -1,5 +1,6 @@
 ﻿using MySearchEngine.Core;
 using System.Collections.Generic;
+using MySearchEngine.Core.Utilities;
 
 namespace MySearchEngine.Indexer
 {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MySearchEngine.Core.Algorithm;
 
 namespace MySearchEngine.Core.Analyzer.TokenFilters
 {

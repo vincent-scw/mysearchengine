@@ -1,4 +1,4 @@
-﻿namespace MySearchEngine.Core
+﻿namespace MySearchEngine.Core.Utilities
 {
     public interface IIdGenerator<TId>
     {

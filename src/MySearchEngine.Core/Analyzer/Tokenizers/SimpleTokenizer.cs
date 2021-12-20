@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MySearchEngine.Core.Utilities;
 
 namespace MySearchEngine.Core.Analyzer.Tokenizers
 {

@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using MySearchEngine.Core.Algorithm;
 using Xunit;
 
-namespace MySearchEngine.Core.Tests
+namespace MySearchEngine.Core.Tests.Algorithm
 {
     public class AcPatternMatcherTests
     {

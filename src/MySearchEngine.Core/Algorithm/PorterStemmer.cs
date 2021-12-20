@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MySearchEngine.Core
+namespace MySearchEngine.Core.Algorithm
 {
     public class PorterStemmer
     {

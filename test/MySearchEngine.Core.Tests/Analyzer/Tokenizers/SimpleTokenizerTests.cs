@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using MySearchEngine.Core.Analyzer.Tokenizers;
+using MySearchEngine.Core.Utilities;
 using Xunit;
 
 namespace MySearchEngine.Core.Tests.Analyzer.Tokenizers

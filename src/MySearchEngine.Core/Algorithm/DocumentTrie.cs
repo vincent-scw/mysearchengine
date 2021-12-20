@@ -1,4 +1,4 @@
-﻿namespace MySearchEngine.Core
+﻿namespace MySearchEngine.Core.Algorithm
 {
     internal class DocumentTrie
     {

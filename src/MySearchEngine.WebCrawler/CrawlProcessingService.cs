@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using MySearchEngine.Core;
+using MySearchEngine.Core.Utilities;
 using Qctrl;
 
 namespace MySearchEngine.WebCrawler

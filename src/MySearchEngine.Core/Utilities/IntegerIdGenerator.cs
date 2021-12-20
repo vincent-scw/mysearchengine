@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace MySearchEngine.Core
+namespace MySearchEngine.Core.Utilities
 {
     public class IntegerIdGenerator : IIdGenerator<int>
     {
