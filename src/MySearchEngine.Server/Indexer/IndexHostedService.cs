@@ -10,10 +10,14 @@ namespace MySearchEngine.Server.Indexer
     class IndexHostedService : BackgroundService
     {
         private readonly QueueSvc.QueueSvcClient _queueClient;
+        private readonly PageIndexer _pageIndexer;
 
-        public IndexHostedService(QueueSvc.QueueSvcClient queueClient)
+        public IndexHostedService(
+            QueueSvc.QueueSvcClient queueClient,
+            PageIndexer pageIndexer)
         {
             _queueClient = queueClient;
+            _pageIndexer = pageIndexer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,11 +25,15 @@ namespace MySearchEngine.Server.Indexer
             while (!stoppingToken.IsCancellationRequested)
             {
                 var message = await _queueClient.ReadAsync(new Empty());
-                if (message == null) continue;
+                if (message == null)
+                {
+                    Thread.Sleep(300);
+                    continue;
+                }
 
                 Console.WriteLine($"Handling message {message.Id}...");
 
-                Thread.Sleep(100);
+                await _pageIndexer.IndexAsync(message);
             }
         }
     }

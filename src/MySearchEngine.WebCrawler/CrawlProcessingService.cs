@@ -64,6 +64,7 @@ namespace MySearchEngine.WebCrawler
             await _queueClient.EnqueueAsync(new Message()
             {
                 Id = _idGenerator.Next(null),
+                Url = url,
                 Body = pi.Content,
                 Timestamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
             });

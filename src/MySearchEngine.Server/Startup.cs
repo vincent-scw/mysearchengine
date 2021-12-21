@@ -13,8 +13,11 @@ using MySearchEngine.Core.Utilities;
 using MySearchEngine.Server.Indexer;
 using Qctrl;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json.Serialization;
 using Grpc.Net.Client;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace MySearchEngine.Server
 {
@@ -51,17 +54,21 @@ namespace MySearchEngine.Server
             services.AddSingleton<TextAnalyzer>((sp) =>
             {
                 var idGenerator = sp.GetRequiredService<IIdGenerator<int>>();
+                var stopWordsStr = File.ReadAllText("..\\..\\res\\stop_words_english.json");
                 return new TextAnalyzer(
                     new List<ICharacterFilter>
                     {
-
+                        new HtmlElementFilter()
                     },
                     new SimpleTokenizer(idGenerator),
                     new List<ITokenFilter>
                     {
-
+                        new LowercaseTokenFilter(),
+                        new StemmerTokenFilter(),
+                        new StopWordTokenFilter(JsonConvert.DeserializeObject<List<string>>(stopWordsStr))
                     });
             });
+            services.AddSingleton<PageIndexer>();
             services.AddHostedService<IndexHostedService>();
         }
 
