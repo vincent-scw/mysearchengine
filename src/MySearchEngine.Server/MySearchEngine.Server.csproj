@@ -37,7 +37,7 @@
 
  <ItemGroup>
     <Protobuf Include="..\..\res\qctrl.proto" GrpcServices="Client" Access="Internal">
-      <Link>Indexer\qctrl.proto</Link>
+      <Link>Core\qctrl.proto</Link>
     </Protobuf>
   </ItemGroup>
 

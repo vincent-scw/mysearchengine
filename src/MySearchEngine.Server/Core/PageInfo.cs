@@ -1,4 +1,4 @@
-﻿namespace MySearchEngine.Server.Indexer
+﻿namespace MySearchEngine.Server.Core
 {
     public class PageInfo
     {

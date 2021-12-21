@@ -1,12 +1,13 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Microsoft.Extensions.Hosting;
-using Qctrl;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Protobuf.WellKnownTypes;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MySearchEngine.Server.Core;
+using Qctrl;
 
-namespace MySearchEngine.Server.Indexer
+namespace MySearchEngine.Server.BackgroundServices
 {
     class IndexHostedService : BackgroundService
     {
@@ -42,7 +43,7 @@ namespace MySearchEngine.Server.Indexer
                     var pageInfo = new PageInfo() {Id = message.Id, Url = message.Url, Content = message.Body};
                     _pageIndexer.Index(pageInfo);
 
-                    await _queueClient.AckAsync(message);
+                    //await _queueClient.AckAsync(message);
                 }
                 catch (Exception ex)
                 {

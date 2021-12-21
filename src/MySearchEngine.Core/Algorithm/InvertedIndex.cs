@@ -7,9 +7,9 @@ namespace MySearchEngine.Core.Algorithm
     {
         private readonly ConcurrentDictionary<int, List<int>> _termPageMapping;
         public IReadOnlyDictionary<int, List<int>> TermPageMapping => _termPageMapping;
-        public InvertedIndex(ConcurrentDictionary<int, List<int>> termPageMapping)
+        public InvertedIndex(IDictionary<int, List<int>> termPageMapping)
         {
-            _termPageMapping = termPageMapping ?? new ConcurrentDictionary<int, List<int>>();
+            _termPageMapping = new ConcurrentDictionary<int, List<int>>(termPageMapping);
         }
 
         public void Index(int termId, int pageId)

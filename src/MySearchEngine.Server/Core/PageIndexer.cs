@@ -3,21 +3,24 @@ using MySearchEngine.Core.Analyzer;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
-namespace MySearchEngine.Server.Indexer
+namespace MySearchEngine.Server.Core
 {
     internal class PageIndexer
     {
         private readonly TextAnalyzer _textAnalyzer;
         private readonly InvertedIndex _invertedIndex;
+        private readonly BinRepository _binRepository;
 
         private readonly ConcurrentDictionary<int, string> _termDictionary;
         private readonly ConcurrentDictionary<int, PageInfo> _pageDictionary;
         public PageIndexer(
             TextAnalyzer textAnalyzer, 
-            InvertedIndex invertedIndex)
+            InvertedIndex invertedIndex,
+            BinRepository binRepository)
         {
             _textAnalyzer = textAnalyzer;
             _invertedIndex = invertedIndex;
+            _binRepository = binRepository;
 
             _termDictionary = new ConcurrentDictionary<int, string>();
             _pageDictionary = new ConcurrentDictionary<int, PageInfo>();
@@ -38,11 +41,14 @@ namespace MySearchEngine.Server.Indexer
         public async Task StoreDataAsync()
         {
             // Store term dict
+            await _binRepository.StoreTermsAsync(_termDictionary);
+            // Store page info
+            await _binRepository.StorePagesAsync(_pageDictionary);
+            _pageDictionary.Clear();
 
             // Store inverted index
+            await _binRepository.StoreIndexAsync(_invertedIndex.TermPageMapping);
 
-            // Store page info
-            _pageDictionary.Clear();
         }
     }
 }

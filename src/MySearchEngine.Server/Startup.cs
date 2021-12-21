@@ -12,12 +12,13 @@ using MySearchEngine.Core.Analyzer.CharacterFilters;
 using MySearchEngine.Core.Analyzer.TokenFilters;
 using MySearchEngine.Core.Analyzer.Tokenizers;
 using MySearchEngine.Core.Utilities;
-using MySearchEngine.Server.Indexer;
 using Newtonsoft.Json;
 using Qctrl;
 using System.Collections.Generic;
 using System.IO;
 using MySearchEngine.Core.Algorithm;
+using MySearchEngine.Server.BackgroundServices;
+using MySearchEngine.Server.Core;
 
 namespace MySearchEngine.Server
 {
@@ -47,6 +48,7 @@ namespace MySearchEngine.Server
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MySearchEngine.Server", Version = "v1" });
             });
 
+            services.Configure<BinPath>(Configuration.GetSection(nameof(BinPath)));
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
@@ -67,8 +69,13 @@ namespace MySearchEngine.Server
                     });
             });
             services.AddSingleton<PageIndexer>();
-            services.AddSingleton<InvertedIndex>();
+            services.AddSingleton<InvertedIndex>((sp) =>
+            {
+                return new InvertedIndex(null);
+            });
+            services.AddTransient<BinRepository>();
             services.AddHostedService<IndexHostedService>();
+            services.AddHostedService<StorageHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
