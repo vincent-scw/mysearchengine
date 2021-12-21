@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MySearchEngine.Core.Analyzer.TokenFilters
 {
-    class StopWordTokenFilter : ITokenFilter
+    public class StopWordTokenFilter : ITokenFilter
     {
         private readonly List<string> _stopWordList;
         public StopWordTokenFilter(IEnumerable<string> stopWordList)

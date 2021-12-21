@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MySearchEngine.Core.Analyzer.CharacterFilters
 {
-    class HtmlElementFilter : ICharacterFilter
+    public class HtmlElementFilter : ICharacterFilter
     {
         private const char ElementStart = '<';
         private const char ElementEnd = '>';

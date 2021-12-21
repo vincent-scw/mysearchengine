@@ -2,7 +2,7 @@
 
 namespace MySearchEngine.Core.Analyzer.TokenFilters
 {
-    class LowercaseTokenFilter : ITokenFilter
+    public class LowercaseTokenFilter : ITokenFilter
     {
         public List<Token> Filter(List<Token> tokens)
         {

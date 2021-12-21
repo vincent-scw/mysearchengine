@@ -4,7 +4,7 @@ using MySearchEngine.Core.Algorithm;
 
 namespace MySearchEngine.Core.Analyzer.TokenFilters
 {
-    class StemmerTokenFilter : ITokenFilter
+    public class StemmerTokenFilter : ITokenFilter
     {
         public List<Token> Filter(List<Token> tokens)
         {

@@ -3,7 +3,7 @@ using MySearchEngine.Core.Utilities;
 
 namespace MySearchEngine.Core.Analyzer.Tokenizers
 {
-    class SimpleTokenizer : ITokenizer
+    public class SimpleTokenizer : ITokenizer
     {
         private readonly IIdGenerator<int> _idGenerator;
         private readonly Dictionary<string, Token> _termTokenMapping;
