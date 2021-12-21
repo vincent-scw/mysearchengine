@@ -4,6 +4,7 @@ using Qctrl;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace MySearchEngine.Server.Indexer
 {
@@ -11,13 +12,16 @@ namespace MySearchEngine.Server.Indexer
     {
         private readonly QueueSvc.QueueSvcClient _queueClient;
         private readonly PageIndexer _pageIndexer;
+        private readonly ILogger<IndexHostedService> _logger;
 
         public IndexHostedService(
             QueueSvc.QueueSvcClient queueClient,
-            PageIndexer pageIndexer)
+            PageIndexer pageIndexer,
+            ILogger<IndexHostedService> logger)
         {
             _queueClient = queueClient;
             _pageIndexer = pageIndexer;
+            _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,9 +35,17 @@ namespace MySearchEngine.Server.Indexer
                     continue;
                 }
 
-                Console.WriteLine($"Handling message {message.Id}...");
+                _logger.LogInformation($"Handling message {message.Id}...");
 
-                await _pageIndexer.IndexAsync(message);
+                try
+                {
+                    await _pageIndexer.IndexAsync(message);
+                    await _queueClient.AckAsync(message);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Index Error");
+                }
             }
         }
     }

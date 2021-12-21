@@ -51,7 +51,7 @@ namespace MySearchEngine.Server
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
             services.AddSingleton<IIdGenerator<int>, GlobalTermIdGenerator>();
-            services.AddSingleton<TextAnalyzer>((sp) =>
+            services.AddSingleton((sp) =>
             {
                 var idGenerator = sp.GetRequiredService<IIdGenerator<int>>();
                 var stopWordsStr = File.ReadAllText("..\\..\\res\\stop_words_english.json");

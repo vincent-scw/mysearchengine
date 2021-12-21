@@ -5,6 +5,7 @@ using MySearchEngine.Core.Utilities;
 using Qctrl;
 using System;
 using System.Threading;
+using Grpc.Net.Client;
 
 namespace MySearchEngine.WebCrawler
 {
@@ -12,9 +13,9 @@ namespace MySearchEngine.WebCrawler
     {
         static void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 1)
             {
-                Console.WriteLine("Arguments required. \"[host] [port]\"");
+                Console.WriteLine("Arguments required.");
                 return;
             }
 
@@ -42,7 +43,8 @@ namespace MySearchEngine.WebCrawler
                     services.AddSingleton<IPageReader, PageReader>();
                     services.AddSingleton<CrawlerConfig>();
                     services.AddSingleton((sp) =>
-                        new QueueSvc.QueueSvcClient(new Channel(args[0], Convert.ToInt32(args[1]), ChannelCredentials.Insecure)));
+                        new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(args[0],
+                            new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure })));
                     services.AddSingleton<IIdGenerator<int>, IntegerIdGenerator>();
                 });
         }
