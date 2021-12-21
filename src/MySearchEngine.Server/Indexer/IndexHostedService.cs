@@ -39,7 +39,9 @@ namespace MySearchEngine.Server.Indexer
 
                 try
                 {
-                    await _pageIndexer.IndexAsync(message);
+                    var pageInfo = new PageInfo() {Id = message.Id, Url = message.Url, Content = message.Body};
+                    _pageIndexer.Index(pageInfo);
+
                     await _queueClient.AckAsync(message);
                 }
                 catch (Exception ex)

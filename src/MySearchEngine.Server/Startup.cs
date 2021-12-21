@@ -1,23 +1,23 @@
 using Grpc.Core;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using MySearchEngine.Core.Analyzer;
 using MySearchEngine.Core.Analyzer.CharacterFilters;
 using MySearchEngine.Core.Analyzer.TokenFilters;
 using MySearchEngine.Core.Analyzer.Tokenizers;
 using MySearchEngine.Core.Utilities;
 using MySearchEngine.Server.Indexer;
+using Newtonsoft.Json;
 using Qctrl;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json.Serialization;
-using Grpc.Net.Client;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
+using MySearchEngine.Core.Algorithm;
 
 namespace MySearchEngine.Server
 {
@@ -50,17 +50,15 @@ namespace MySearchEngine.Server
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
-            services.AddSingleton<IIdGenerator<int>, GlobalTermIdGenerator>();
             services.AddSingleton((sp) =>
             {
-                var idGenerator = sp.GetRequiredService<IIdGenerator<int>>();
                 var stopWordsStr = File.ReadAllText("..\\..\\res\\stop_words_english.json");
                 return new TextAnalyzer(
                     new List<ICharacterFilter>
                     {
                         new HtmlElementFilter()
                     },
-                    new SimpleTokenizer(idGenerator),
+                    new SimpleTokenizer(new GlobalTermIdGenerator()),
                     new List<ITokenFilter>
                     {
                         new LowercaseTokenFilter(),
@@ -69,6 +67,7 @@ namespace MySearchEngine.Server
                     });
             });
             services.AddSingleton<PageIndexer>();
+            services.AddSingleton<InvertedIndex>();
             services.AddHostedService<IndexHostedService>();
         }
 

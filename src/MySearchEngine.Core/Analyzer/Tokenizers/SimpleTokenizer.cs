@@ -20,7 +20,7 @@ namespace MySearchEngine.Core.Analyzer.Tokenizers
             var tokenStart = -1;
             while (index <= text.Length)
             {
-                if (index == text.Length || char.IsWhiteSpace(text[index]))
+                if (index == text.Length || ShouldEscape(text[index]))
                 {
                     if (tokenStart >= 0)
                     {
@@ -30,7 +30,7 @@ namespace MySearchEngine.Core.Analyzer.Tokenizers
                     }
 
                 }
-                else if (index == 0 || (index > 0 && char.IsWhiteSpace(text[index - 1])))
+                else if (index == 0 || (index > 0 && ShouldEscape(text[index - 1])))
                 {
                     tokenStart = index;
                 }
@@ -49,6 +49,12 @@ namespace MySearchEngine.Core.Analyzer.Tokenizers
 
             token.Positions.Add(index);
             _termTokenMapping.TryAdd(term, token);
+        }
+
+        private static bool ShouldEscape(char c)
+        {
+            // Take it simple, tokenize letter and digit only
+            return !char.IsLetterOrDigit(c);
         }
     }
 }
