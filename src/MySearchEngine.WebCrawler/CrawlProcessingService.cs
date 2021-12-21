@@ -38,11 +38,11 @@ namespace MySearchEngine.WebCrawler
             if (cancellationToken.IsCancellationRequested)
                 return;
 
-            var links = await HandleOneAsync(url);
-            if(links == null)
+            var pi = await HandleOneAsync(url);
+            if(pi?.Links == null)
                 return;
-            
-            foreach (var link in links)
+
+            foreach (var link in pi.Links)
             {
                 if (!_booleanFilter.TryAdd(link))
                     continue;
@@ -51,26 +51,28 @@ namespace MySearchEngine.WebCrawler
             }
         }
 
-        private async Task<List<string>> HandleOneAsync(string url)
+        private async Task<PageInfo> HandleOneAsync(string url)
         {
             Console.Write($"Reading page at: {url}");
             var pi = await _pageReader.ReadAsync(new Uri(url));
-            if (pi == null)
+            // Add title to boolean filter as well, to avoid different links target to same page
+            if (pi == null || !_booleanFilter.TryAdd(pi.Title))
             {
                 Console.WriteLine("  Ignored.");
                 return null;
             }
-
+            
             await _queueClient.EnqueueAsync(new Message()
             {
                 Id = _idGenerator.Next(null),
+                Title = pi.Title,
                 Url = url,
                 Body = pi.Content,
                 Timestamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
             });
 
             Console.WriteLine("  Done.");
-            return pi.Links;
+            return pi;
         }
     }
 }

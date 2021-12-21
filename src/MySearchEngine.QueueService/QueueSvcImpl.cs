@@ -25,8 +25,12 @@ namespace MySearchEngine.QueueService
 
         public override Task<Message> Read(Empty request, ServerCallContext context)
         {
-            _queue.TryPeek(out Message msg);
-            return Task.FromResult(msg);
+            if (_queue.TryPeek(out Message msg))
+            {
+                return Task.FromResult(msg);
+            }
+
+            return Task.FromResult(new Message() {Id = -1});
         }
 
         public override Task<Result> Ack(Message request, ServerCallContext context)

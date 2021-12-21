@@ -30,7 +30,7 @@ namespace MySearchEngine.Server.BackgroundServices
             while (!stoppingToken.IsCancellationRequested)
             {
                 var message = await _queueClient.ReadAsync(new Empty());
-                if (message == null)
+                if (message.Id <= 0)
                 {
                     Thread.Sleep(300);
                     continue;
@@ -40,10 +40,11 @@ namespace MySearchEngine.Server.BackgroundServices
 
                 try
                 {
-                    var pageInfo = new PageInfo() {Id = message.Id, Url = message.Url, Content = message.Body};
-                    _pageIndexer.Index(pageInfo);
+                    // Don't need to store page content
+                    var pageInfo = new PageInfo() {Id = message.Id, Title = message.Title, Url = message.Url};
+                    _pageIndexer.Index(pageInfo, message.Body);
 
-                    //await _queueClient.AckAsync(message);
+                    await _queueClient.AckAsync(message);
                 }
                 catch (Exception ex)
                 {

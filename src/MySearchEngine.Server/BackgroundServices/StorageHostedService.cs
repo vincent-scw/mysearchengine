@@ -17,9 +17,9 @@ namespace MySearchEngine.Server.BackgroundServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                Thread.Sleep(1 * 1000);
+                Thread.Sleep(15 * 1000);
 
-                // Store to disk every 30 seconds
+                // Store to disk every 15 seconds
                 await _pageIndexer.StoreDataAsync();
             }
         }

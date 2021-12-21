@@ -5,11 +5,11 @@ namespace MySearchEngine.Core.Algorithm
 {
     public class InvertedIndex
     {
-        private readonly ConcurrentDictionary<int, List<int>> _termPageMapping;
+        private readonly Dictionary<int, List<int>> _termPageMapping;
         public IReadOnlyDictionary<int, List<int>> TermPageMapping => _termPageMapping;
         public InvertedIndex(IDictionary<int, List<int>> termPageMapping)
         {
-            _termPageMapping = new ConcurrentDictionary<int, List<int>>(termPageMapping);
+            _termPageMapping = new Dictionary<int, List<int>>(termPageMapping);
         }
 
         public void Index(int termId, int pageId)

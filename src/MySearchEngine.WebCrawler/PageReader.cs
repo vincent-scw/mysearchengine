@@ -28,8 +28,17 @@ namespace MySearchEngine.WebCrawler
                 return null;
 
             var htmlContent = await response.Content.ReadAsStringAsync();
-
-            return new PageInfo(){Content = htmlContent, Links = ReadLinks(htmlContent)};
+            var title = ReadTitle(htmlContent);
+            // No title
+            if (string.IsNullOrWhiteSpace(title))
+                return null;
+            
+            return new PageInfo()
+            {
+                Title = title,
+                Content = htmlContent, 
+                Links = ReadLinks(uri, htmlContent)
+            };
         }
 
         public void Dispose()
@@ -37,12 +46,26 @@ namespace MySearchEngine.WebCrawler
             _httpClient?.Dispose();
         }
 
-        private List<string> ReadLinks(string content)
+        private string ReadTitle(string content)
+        {
+            var t = content.IndexOf("<title>", StringComparison.Ordinal);
+            if (t < 0)
+            {
+                return string.Empty;
+            }
+
+            var tStart = t + 7;
+            var tEnd = content.IndexOf("</title>", StringComparison.Ordinal) - 1;
+            var title = content[tStart..tEnd];
+            return title.Split('|')[0].Trim();
+        }
+
+        private List<string> ReadLinks(Uri uri, string content)
         {
             var regex = new Regex(LinkPattern);
             var matches = regex.Matches(content).Select(x => x.Value);
 
-            return matches.Where(match => match.StartsWith(_config.CrawlLinkPrefix)
+            return matches.Where(match => match.StartsWith($"{uri.Scheme}://{uri.Host}")
                                           && !_config.ExcludeLinkSuffix.Any(match.EndsWith)).ToList();
         }
     }

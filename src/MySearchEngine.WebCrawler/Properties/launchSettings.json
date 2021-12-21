@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MySearchEngine.WebCrawler": {
+      "commandName": "Project",
+      "commandLineArgs": "http://localhost:10024"
+    }
+  }
+}

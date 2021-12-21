@@ -14,8 +14,9 @@ service QueueSvc {
 message Message {
 	int32 id = 1;
 	google.protobuf.Timestamp timestamp = 2;
-	string url = 3;
-	string body = 4;
+	string title = 3;
+	string url = 4;
+	string body = 5;
 }
 
 message Result {

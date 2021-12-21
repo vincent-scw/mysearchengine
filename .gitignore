@@ -258,3 +258,6 @@ pub/
 .eshopdocker_*
 **/.kube/**
 .mfractor
+/res/term.bin
+/res/page.bin
+/res/index.bin

@@ -8,7 +8,8 @@ namespace MySearchEngine.Server.Core
 {
     public class BinRepository
     {
-        private const string GENERAL_FORMAT = "{0}\t{1}";
+        private const string GENERAL_FORMAT = "{0}|{1}";
+        private const string PAGE_FORMAT = "{0}|{1}|{2}";
 
         private readonly BinPath _binPath;
         public BinRepository(IOptions<BinPath> binPath)
@@ -30,7 +31,7 @@ namespace MySearchEngine.Server.Core
             await using var stream = File.CreateText(_binPath.Page);
             foreach (var (id, pi) in pageDictionary)
             {
-                await stream.WriteLineAsync(string.Format(GENERAL_FORMAT, id, pi.Url));
+                await stream.WriteLineAsync(string.Format(PAGE_FORMAT, id, pi.Title, pi.Url));
             }
         }
 
