@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Core.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.WebCrawler.Tests", "test\MySearchEngine.WebCrawler.Tests\MySearchEngine.WebCrawler.Tests.csproj", "{9D6D9F6E-A9AA-4BF6-B163-05A596221812}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.Indexer", "src\MySearchEngine.Indexer\MySearchEngine.Indexer.csproj", "{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySearchEngine.QueueService", "src\MySearchEngine.QueueService\MySearchEngine.QueueService.csproj", "{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{2C568677-2D32-4CCF-9E62-D203350F41B1}"
@@ -24,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "res", "res", "{2C568677-2D3
 		res\qctrl.proto = res\qctrl.proto
 		res\stop_words_english.json = res\stop_words_english.json
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySearchEngine.Server", "src\MySearchEngine.Server\MySearchEngine.Server.csproj", "{172158AD-BC7D-4185-9592-89DB61076348}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,14 +47,14 @@ Global
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{172158AD-BC7D-4185-9592-89DB61076348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{172158AD-BC7D-4185-9592-89DB61076348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{172158AD-BC7D-4185-9592-89DB61076348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{172158AD-BC7D-4185-9592-89DB61076348}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,8 +64,8 @@ Global
 		{D7C4FDD4-78F7-40C4-BB85-0BCC1CB1BEC8} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{C0C23CC9-7C39-410A-A3D7-2E7999B74AFF} = {7D0FA138-EF52-4FCB-9C78-E12E62779EFA}
 		{9D6D9F6E-A9AA-4BF6-B163-05A596221812} = {7D0FA138-EF52-4FCB-9C78-E12E62779EFA}
-		{A768D49C-BFA6-4E1A-A315-D3E979B4CDEF} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 		{5B5FE78F-5157-4AD8-8CDD-7A9E665B6D1A} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
+		{172158AD-BC7D-4185-9592-89DB61076348} = {7BCAAEA9-86AB-4288-8447-47579BFE55AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D1257B8-DFCB-4B3B-9E38-06419C1DCCEA}
