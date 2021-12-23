@@ -2,23 +2,23 @@ using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Analyzer;
 using MySearchEngine.Core.Analyzer.CharacterFilters;
 using MySearchEngine.Core.Analyzer.TokenFilters;
 using MySearchEngine.Core.Analyzer.Tokenizers;
 using MySearchEngine.Core.Utilities;
+using MySearchEngine.Server.BackgroundServices;
+using MySearchEngine.Server.Core;
 using Newtonsoft.Json;
 using Qctrl;
 using System.Collections.Generic;
 using System.IO;
-using MySearchEngine.Core.Algorithm;
-using MySearchEngine.Server.BackgroundServices;
-using MySearchEngine.Server.Core;
 
 namespace MySearchEngine.Server
 {
@@ -34,14 +34,7 @@ namespace MySearchEngine.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddControllersWithViews();
-
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
+            services.AddMvc();
 
             services.AddSwaggerGen(c =>
             {
@@ -69,7 +62,7 @@ namespace MySearchEngine.Server
                     });
             });
             services.AddSingleton<PageIndexer>();
-            services.AddSingleton<InvertedIndex>((sp) =>
+            services.AddSingleton((sp) =>
             {
                 return new InvertedIndex(new Dictionary<int, List<int>>());
             });
@@ -87,34 +80,15 @@ namespace MySearchEngine.Server
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MySearchEngine.Server v1"));
             }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
-            });
-
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
+                endpoints.Map("/", async context => await context.Response.WriteAsync("OK"));
+                endpoints.MapControllers();
             });
         }
     }

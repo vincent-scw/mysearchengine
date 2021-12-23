@@ -25,14 +25,20 @@ namespace MySearchEngine.Server.BackgroundServices
             _logger = logger;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation($"{nameof(IndexHostedService)} is running.");
+            return BackgroundProcessing(stoppingToken);
+        }
+
+        private async Task BackgroundProcessing(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 var message = await _queueClient.ReadAsync(new Empty());
                 if (message.Id <= 0)
                 {
-                    Thread.Sleep(300);
+                    await Task.Delay(300, stoppingToken);
                     continue;
                 }
 
@@ -41,7 +47,7 @@ namespace MySearchEngine.Server.BackgroundServices
                 try
                 {
                     // Don't need to store page content
-                    var pageInfo = new PageInfo() {Id = message.Id, Title = message.Title, Url = message.Url};
+                    var pageInfo = new PageInfo() { Id = message.Id, Title = message.Title, Url = message.Url };
                     _pageIndexer.Index(pageInfo, message.Body);
 
                     await _queueClient.AckAsync(message);
