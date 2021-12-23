@@ -54,7 +54,7 @@ namespace MySearchEngine.Server.BackgroundServices
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Index Error");
+                    _logger.LogError(ex, "Index error");
                 }
             }
         }

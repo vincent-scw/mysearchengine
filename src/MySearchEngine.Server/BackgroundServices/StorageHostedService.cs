@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -28,10 +29,17 @@ namespace MySearchEngine.Server.BackgroundServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                Thread.Sleep(15 * 1000);
+                await Task.Delay(15 * 1000, stoppingToken);
 
-                // Store to disk every 15 seconds
-                await _pageIndexer.StoreDataAsync();
+                try
+                {
+                    // Store to disk every 15 seconds
+                    await _pageIndexer.StoreDataAsync();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Store data error");
+                }
             }
         }
     }
