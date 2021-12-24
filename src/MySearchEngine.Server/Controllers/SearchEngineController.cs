@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MySearchEngine.Server.Core;
 
@@ -24,7 +25,12 @@ namespace MySearchEngine.Server.Controllers
         {
             _logger.LogInformation($"Search for \"{searchText}\"");
             var searchResult = _searchEngine.Search(searchText, size, from);
-            return Ok(searchResult);
+            return Ok(searchResult.Select(p => new
+            {
+                p.pageInfo.Title,
+                p.pageInfo.Url,
+                Score = p.score
+            }));
         }
     }
 }

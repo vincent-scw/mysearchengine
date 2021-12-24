@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Analyzer;
 using MySearchEngine.Core.Analyzer.CharacterFilters;
 using MySearchEngine.Core.Analyzer.TokenFilters;
@@ -6,7 +6,6 @@ using MySearchEngine.Core.Analyzer.Tokenizers;
 using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
-using MySearchEngine.Core.Algorithm;
 
 namespace MySearchEngine.Server.Core
 {
@@ -48,10 +47,28 @@ namespace MySearchEngine.Server.Core
                     // Use TF-IDF to calculate the score
                     return (pi,
                         Tf_Idf.Calculate(p.termCount, pi.TokenCount, _pageIndexer.GetTotalPagesCount(), pages.Count));
-                }).ToList();
+                }).Where(x => x.pi != null).ToList();
             }).ToList();
 
-            return indexedPages;
+            // Sum up all token scores by page
+            var ret = indexedPages.GroupBy(ip => ip.Item1.Id)
+                .Select(x =>
+                {
+                    var page = x.First();
+                    return (page.Item1, x.Sum(d => d.Item2));
+                }).ToList();
+
+            ret.Sort(new ScoreComparer());
+
+            return ret.Skip(from).Take(size).ToList();
+        }
+
+        private class ScoreComparer : Comparer<(PageInfo, double)>
+        {
+            public override int Compare((PageInfo, double) x, (PageInfo, double) y)
+            {
+                return y.CompareTo(x);
+            }
         }
     }
 }
