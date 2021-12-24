@@ -6,6 +6,7 @@ using MySearchEngine.Core.Analyzer.Tokenizers;
 using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Core
 {
@@ -36,17 +37,17 @@ namespace MySearchEngine.Server.Core
             {
                 var term = t.Term;
                 // Find indexed pages
-                if (!_pageIndexer.TryGetIndexedPages(term, out List<(int pageId, int termCount)> pages))
+                if (!_pageIndexer.TryGetIndexedPages(term, out List<TermInDoc> docs))
                     return new List<(PageInfo, double)>();
 
-                return pages.Select(p =>
+                return docs.Select(p =>
                 {
-                    if (!_pageIndexer.TryGetPageInfo(p.pageId, out PageInfo pi))
+                    if (!_pageIndexer.TryGetPageInfo(p.DocId, out PageInfo pi))
                         return ((PageInfo)null, 0);
 
                     // Use TF-IDF to calculate the score
                     return (pi,
-                        Tf_Idf.Calculate(p.termCount, pi.TokenCount, _pageIndexer.GetTotalPagesCount(), pages.Count));
+                        Tf_Idf.Calculate(p.TermInDocCount, pi.TokenCount, _pageIndexer.GetTotalPagesCount(), docs.Count));
                 }).Where(x => x.pi != null).ToList();
             }).ToList();
 

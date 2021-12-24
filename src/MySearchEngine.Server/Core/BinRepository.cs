@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using MySearchEngine.Core;
 using Newtonsoft.Json;
 using File = System.IO.File;
 
@@ -35,13 +36,13 @@ namespace MySearchEngine.Server.Core
             }
         }
 
-        public async Task StoreIndexAsync(IReadOnlyDictionary<int, List<(int pageId, int termCount)>> indexDictionary)
+        public async Task StoreIndexAsync(IReadOnlyDictionary<int, List<TermInDoc>> indexDictionary)
         {
             await using var stream = ReadFileAsync(_binFile.Index);
             foreach (var (termId, pages) in indexDictionary)
             {
                 await stream.WriteLineAsync(
-                    $"{termId}|{string.Join(',', pages.Select(x => $"{x.pageId}:{x.termCount}"))}");
+                    $"{termId}|{string.Join(',', pages.Select(x => $"{x.DocId}:{x.TermInDocCount}"))}");
             }
         }
 
@@ -85,10 +86,10 @@ namespace MySearchEngine.Server.Core
             return ret;
         }
 
-        public async Task<IDictionary<int, List<(int pageId, int termCount)>>> ReadIndexAsync()
+        public async Task<IDictionary<int, List<TermInDoc>>> ReadIndexAsync()
         {
             var lines = await ReadLinesAsync(_binFile.Index);
-            var ret = new Dictionary<int, List<(int, int)>>();
+            var ret = new Dictionary<int, List<TermInDoc>>();
             foreach (var line in lines)
             {
                 var parts = line.Split('|');
@@ -97,7 +98,7 @@ namespace MySearchEngine.Server.Core
                 var list = indexes.Select(i =>
                 {
                     var pt = i.Split(':');
-                    return (Convert.ToInt32(pt[0]), Convert.ToInt32(pt[1]));
+                    return new TermInDoc(Convert.ToInt32(parts[0]), Convert.ToInt32(pt[0]), Convert.ToInt32(pt[1]));
                 }).ToList();
                 ret.TryAdd(Convert.ToInt32(parts[0]), list);
             }

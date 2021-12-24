@@ -7,6 +7,7 @@ using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Core
 {
@@ -109,7 +110,7 @@ namespace MySearchEngine.Server.Core
             return _pageDictionary.Count;
         }
 
-        public bool TryGetIndexedPages(string term, out List<(int pageId, int termCount)> pages)
+        public bool TryGetIndexedPages(string term, out List<TermInDoc> pages)
         {
             if (_termDictionary.TryGetValue(term, out int termId))
                 return _invertedIndex.TryGetIndexedPages(termId, out pages);

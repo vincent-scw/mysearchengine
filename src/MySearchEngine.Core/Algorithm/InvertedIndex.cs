@@ -1,31 +1,29 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using MySearchEngine.Core.Analyzer;
+﻿using System.Collections.Generic;
 
 namespace MySearchEngine.Core.Algorithm
 {
     public class InvertedIndex
     {
-        private readonly Dictionary<int, List<(int, int)>> _termPageMapping;
-        public IReadOnlyDictionary<int, List<(int pageId, int termCount)>> TermPageMapping => _termPageMapping;
-        public InvertedIndex(IDictionary<int, List<(int, int)>> termPageMapping)
+        private readonly Dictionary<int, List<TermInDoc>> _termPageMapping;
+        public IReadOnlyDictionary<int, List<TermInDoc>> TermPageMapping => _termPageMapping;
+        public InvertedIndex(IDictionary<int, List<TermInDoc>> termPageMapping)
         {
-            _termPageMapping = new Dictionary<int, List<(int, int)>>(termPageMapping);
+            _termPageMapping = new Dictionary<int, List<TermInDoc>>(termPageMapping);
         }
 
         public void Index(Token token, int pageId)
         {
             var termId = token.Id;
-            if (_termPageMapping.TryGetValue(termId, out List<(int, int)> list))
-                list.Add((pageId, token.Positions.Count));
+            if (_termPageMapping.TryGetValue(termId, out List<TermInDoc> list))
+                list.Add(new TermInDoc(termId, pageId, token.TermInDocCount));
             else
             {
-                list = new List<(int, int)> {(pageId, token.Positions.Count)};
+                list = new List<TermInDoc> { new TermInDoc(termId, pageId, token.TermInDocCount)};
                 _termPageMapping.TryAdd(termId, list);
             }
         }
 
-        public bool TryGetIndexedPages(int termId, out List<(int pageId, int termCount)> pages)
+        public bool TryGetIndexedPages(int termId, out List<TermInDoc> pages)
         {
             return _termPageMapping.TryGetValue(termId, out pages);
         }
