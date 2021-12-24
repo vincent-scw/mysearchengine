@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using File = System.IO.File;
 
 namespace MySearchEngine.Server.Core
 {
@@ -29,7 +29,7 @@ namespace MySearchEngine.Server.Core
             await using var stream = File.CreateText(_binPath.Page);
             foreach (var (id, pi) in pageDictionary)
             {
-                await stream.WriteLineAsync($"{id}|{pi.Title}|{pi.Url}");
+                await stream.WriteLineAsync($"{id}|{pi.Title}|{pi.Url}|{pi.TokenCount}");
             }
         }
 
@@ -45,17 +45,56 @@ namespace MySearchEngine.Server.Core
 
         public async Task<IDictionary<int, string>> ReadTermsAsync()
         {
-            throw new NotImplementedException();
+            var lines = await File.ReadAllLinesAsync(_binPath.Term);
+            var ret = new Dictionary<int, string>();
+            foreach (var line in lines)
+            {
+                var parts = line.Split('|');
+                if (parts.Length != 2) continue;
+                ret.TryAdd(Convert.ToInt32(parts[0]), parts[1]);
+            }
+
+            return ret;
         }
 
         public async Task<IDictionary<int, PageInfo>> ReadPagesAsync()
         {
-            throw new NotImplementedException();
+            var lines = await File.ReadAllLinesAsync(_binPath.Page);
+            var ret = new Dictionary<int, PageInfo>();
+            foreach (var line in lines)
+            {
+                var parts = line.Split('|');
+                if (parts.Length != 4) continue;
+                ret.TryAdd(Convert.ToInt32(parts[0]), new PageInfo
+                {
+                    Id = Convert.ToInt32(parts[0]),
+                    Title = parts[1],
+                    Url = parts[2],
+                    TokenCount = Convert.ToInt32(parts[3])
+                });
+            }
+
+            return ret;
         }
 
-        public async Task<IDictionary<int, List<int>>> ReadIndexAsync()
+        public async Task<IDictionary<int, List<(int pageId, int termCount)>>> ReadIndexAsync()
         {
-            throw new NotImplementedException();
+            var lines = await File.ReadAllLinesAsync(_binPath.Index);
+            var ret = new Dictionary<int, List<(int, int)>>();
+            foreach (var line in lines)
+            {
+                var parts = line.Split('|');
+                if (parts.Length != 2) continue;
+                var indexes = parts[1].Split(',');
+                var list = indexes.Select(i =>
+                {
+                    var pt = i.Split(':');
+                    return (Convert.ToInt32(pt[0]), Convert.ToInt32(pt[1]));
+                }).ToList();
+                ret.TryAdd(Convert.ToInt32(parts[0]), list);
+            }
+
+            return ret;
         }
     }
 }

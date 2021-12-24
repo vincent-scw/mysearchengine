@@ -9,26 +9,35 @@ namespace MySearchEngine.Server.Core
     internal class PageIndexer
     {
         private readonly TextAnalyzer _textAnalyzer;
-        private readonly InvertedIndex _invertedIndex;
         private readonly BinRepository _binRepository;
 
-        private readonly Dictionary<int, string> _termDictionary;
-        private readonly Dictionary<int, PageInfo> _pageDictionary;
+        private InvertedIndex _invertedIndex;
+        private IDictionary<int, string> _termDictionary;
+        private IDictionary<int, PageInfo> _pageDictionary;
         private readonly SemaphoreSlim _semaphoreSlim;
         private int _newAfterStoreCount;
         public PageIndexer(
-            TextAnalyzer textAnalyzer, 
-            InvertedIndex invertedIndex,
+            TextAnalyzer textAnalyzer,
             BinRepository binRepository)
         {
             _textAnalyzer = textAnalyzer;
-            _invertedIndex = invertedIndex;
             _binRepository = binRepository;
-
-            _termDictionary = new Dictionary<int, string>();
-            _pageDictionary = new Dictionary<int, PageInfo>();
+            
             _semaphoreSlim = new SemaphoreSlim(1, 1);
             _newAfterStoreCount = 0;
+
+            InitAsync().Wait();
+        }
+
+        /// <summary>
+        /// Read data from stored bin file
+        /// </summary>
+        /// <returns></returns>
+        public async Task InitAsync()
+        {
+            _termDictionary = await _binRepository.ReadTermsAsync();
+            _pageDictionary = await _binRepository.ReadPagesAsync();
+            _invertedIndex = new InvertedIndex(await _binRepository.ReadIndexAsync());
         }
 
         public void Index(PageInfo page, string content)
