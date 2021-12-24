@@ -40,7 +40,7 @@ namespace MySearchEngine.Server.Core
             foreach (var (termId, pages) in indexDictionary)
             {
                 await stream.WriteLineAsync(
-                    $"{termId}|{string.Join(',', pages.Select(x => $"{x.pageId}:${x.termCount}"))}");
+                    $"{termId}|{string.Join(',', pages.Select(x => $"{x.pageId}:{x.termCount}"))}");
             }
         }
 
