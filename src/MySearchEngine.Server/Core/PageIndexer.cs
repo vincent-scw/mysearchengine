@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MySearchEngine.Server.Core
 {
-    internal class PageIndexer
+    public class PageIndexer
     {
         private readonly BinRepository _binRepository;
 

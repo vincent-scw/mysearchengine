@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MySearchEngine.Server.Core
 {
-    class SearchEngine
+    public class SearchEngine
     {
         private readonly PageIndexer _pageIndexer;
 
@@ -67,7 +67,7 @@ namespace MySearchEngine.Server.Core
         {
             public override int Compare((PageInfo, double) x, (PageInfo, double) y)
             {
-                return y.CompareTo(x);
+                return y.Item2.CompareTo(x.Item2);
             }
         }
     }

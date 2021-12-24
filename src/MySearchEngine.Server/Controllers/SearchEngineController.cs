@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MySearchEngine.Server.Core;
@@ -7,7 +8,7 @@ namespace MySearchEngine.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    class SearchEngineController : ControllerBase
+    public class SearchEngineController : ControllerBase
     {
         private readonly SearchEngine _searchEngine;
         private readonly ILogger<SearchEngineController> _logger;
@@ -29,7 +30,7 @@ namespace MySearchEngine.Server.Controllers
             {
                 p.pageInfo.Title,
                 p.pageInfo.Url,
-                Score = p.score
+                Score = Math.Round(p.score, 4)
             }));
         }
     }

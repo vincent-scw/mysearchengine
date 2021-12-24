@@ -59,7 +59,7 @@ namespace MySearchEngine.Server.Core
             {
                 var parts = line.Split('|');
                 if (parts.Length != 2) continue;
-                ret.TryAdd(parts[1], Convert.ToInt32(parts[0]));
+                ret.TryAdd(parts[0], Convert.ToInt32(parts[1]));
             }
 
             return ret;
