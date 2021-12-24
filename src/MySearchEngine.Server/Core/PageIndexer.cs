@@ -20,7 +20,7 @@ namespace MySearchEngine.Server.Core
 
         private IDictionary<string, int> _termDictionary;
 
-        private IDictionary<int, PageInfo> _pageDictionary;
+        private IDictionary<int, DocInfo> _pageDictionary;
 
         private readonly SemaphoreSlim _semaphoreSlim;
         private int _newAfterStoreCount;
@@ -59,7 +59,7 @@ namespace MySearchEngine.Server.Core
                 });
         }
 
-        public void Index(PageInfo page, string content)
+        public void Index(DocInfo page, string content)
         {
             var tokens = _textAnalyzer.Analyze(content);
             page.TokenCount = tokens.Count;
@@ -119,7 +119,7 @@ namespace MySearchEngine.Server.Core
             return false;
         }
 
-        public bool TryGetPageInfo(int pageId, out PageInfo pi)
+        public bool TryGetPageInfo(int pageId, out DocInfo pi)
         {
             return _pageDictionary.TryGetValue(pageId, out pi);
         }

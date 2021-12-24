@@ -27,7 +27,7 @@ namespace MySearchEngine.Server.Core
             }
         }
 
-        public async Task StorePagesAsync(IDictionary<int, PageInfo> pageDictionary)
+        public async Task StorePagesAsync(IDictionary<int, DocInfo> pageDictionary)
         {
             await using var stream = ReadFileAsync(_binFile.Page);
             foreach (var (id, pi) in pageDictionary)
@@ -66,15 +66,15 @@ namespace MySearchEngine.Server.Core
             return ret;
         }
 
-        public async Task<IDictionary<int, PageInfo>> ReadPagesAsync()
+        public async Task<IDictionary<int, DocInfo>> ReadPagesAsync()
         {
             var lines = await ReadLinesAsync(_binFile.Page);
-            var ret = new Dictionary<int, PageInfo>();
+            var ret = new Dictionary<int, DocInfo>();
             foreach (var line in lines)
             {
                 var parts = line.Split('|');
                 if (parts.Length != 4) continue;
-                ret.TryAdd(Convert.ToInt32(parts[0]), new PageInfo
+                ret.TryAdd(Convert.ToInt32(parts[0]), new DocInfo
                 {
                     Id = Convert.ToInt32(parts[0]),
                     Title = parts[1],

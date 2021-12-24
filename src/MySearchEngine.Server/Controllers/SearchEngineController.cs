@@ -28,9 +28,9 @@ namespace MySearchEngine.Server.Controllers
             var searchResult = _searchEngine.Search(searchText, size, from);
             return Ok(searchResult.Select(p => new
             {
-                p.pageInfo.Title,
-                p.pageInfo.Url,
-                Score = Math.Round(p.score, 4)
+                p.DocInfo.Title,
+                p.DocInfo.Url,
+                Score = Math.Round(p.Score, 4)
             }));
         }
     }
