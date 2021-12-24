@@ -7,6 +7,7 @@ namespace MySearchEngine.Core.Algorithm
     public class BooleanFilter
     {
         private bool[] _bArray;
+        public bool[] BooleanArray => _bArray;
         public BooleanFilter(int capacity)
         {
             _bArray = new bool[capacity];

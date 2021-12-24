@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using File = System.IO.File;
@@ -9,15 +10,15 @@ namespace MySearchEngine.Server.Core
 {
     public class BinRepository
     {
-        private readonly BinPath _binPath;
-        public BinRepository(IOptions<BinPath> binPath)
+        private readonly BinFile _binFile;
+        public BinRepository(IOptions<BinFile> binFileOptions)
         {
-            _binPath = binPath.Value;
+            _binFile = binFileOptions.Value;
         }
 
         public async Task StoreTermsAsync(IDictionary<int, string> termDictionary)
         {
-            await using var stream = File.CreateText(_binPath.Term);
+            await using var stream = ReadFileAsync(_binFile.Term);
             foreach (var (id, term) in termDictionary)
             {
                 await stream.WriteLineAsync($"{id}|{term}");
@@ -26,7 +27,7 @@ namespace MySearchEngine.Server.Core
 
         public async Task StorePagesAsync(IDictionary<int, PageInfo> pageDictionary)
         {
-            await using var stream = File.CreateText(_binPath.Page);
+            await using var stream = ReadFileAsync(_binFile.Page);
             foreach (var (id, pi) in pageDictionary)
             {
                 await stream.WriteLineAsync($"{id}|{pi.Title}|{pi.Url}|{pi.TokenCount}");
@@ -35,7 +36,7 @@ namespace MySearchEngine.Server.Core
 
         public async Task StoreIndexAsync(IReadOnlyDictionary<int, List<(int pageId, int termCount)>> indexDictionary)
         {
-            await using var stream = File.CreateText(_binPath.Index);
+            await using var stream = ReadFileAsync(_binFile.Index);
             foreach (var (termId, pages) in indexDictionary)
             {
                 await stream.WriteLineAsync(
@@ -45,7 +46,7 @@ namespace MySearchEngine.Server.Core
 
         public async Task<IDictionary<int, string>> ReadTermsAsync()
         {
-            var lines = await File.ReadAllLinesAsync(_binPath.Term);
+            var lines = await ReadLinesAsync(_binFile.Term);
             var ret = new Dictionary<int, string>();
             foreach (var line in lines)
             {
@@ -59,7 +60,7 @@ namespace MySearchEngine.Server.Core
 
         public async Task<IDictionary<int, PageInfo>> ReadPagesAsync()
         {
-            var lines = await File.ReadAllLinesAsync(_binPath.Page);
+            var lines = await ReadLinesAsync(_binFile.Page);
             var ret = new Dictionary<int, PageInfo>();
             foreach (var line in lines)
             {
@@ -79,7 +80,7 @@ namespace MySearchEngine.Server.Core
 
         public async Task<IDictionary<int, List<(int pageId, int termCount)>>> ReadIndexAsync()
         {
-            var lines = await File.ReadAllLinesAsync(_binPath.Index);
+            var lines = await ReadLinesAsync(_binFile.Index);
             var ret = new Dictionary<int, List<(int, int)>>();
             foreach (var line in lines)
             {
@@ -95,6 +96,26 @@ namespace MySearchEngine.Server.Core
             }
 
             return ret;
+        }
+
+        private static StreamWriter ReadFileAsync(string fileName)
+        {
+            return File.CreateText(Path.Combine(FindResPath(Environment.CurrentDirectory), fileName));
+        }
+
+        private static Task<string[]> ReadLinesAsync(string fileName)
+        {
+            var path = Path.Combine(FindResPath(Environment.CurrentDirectory), fileName);
+            return File.Exists(path) ? File.ReadAllLinesAsync(path) : Task.FromResult(new string[0]);
+        }
+
+        private static string FindResPath(string currentDirectory)
+        {
+            var newPath = Path.Combine(currentDirectory, "res");
+            if (Directory.Exists(newPath))
+                return newPath;
+
+            return FindResPath(Path.Combine(currentDirectory, "..\\"));
         }
     }
 }

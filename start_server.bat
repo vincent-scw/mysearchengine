@@ -1,0 +1,1 @@
+dotnet src\MySearchEngine.Server\bin\Debug\net5.0\MySearchEngine.Server.dll

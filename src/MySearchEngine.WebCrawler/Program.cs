@@ -39,10 +39,11 @@ namespace MySearchEngine.WebCrawler
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
+                    services.AddSingleton<BinRepository>();
                     services.AddSingleton<IProcessingService, CrawlProcessingService>();
                     services.AddSingleton<IPageReader, PageReader>();
                     services.AddSingleton<CrawlerConfig>();
-                    services.AddSingleton((sp) =>
+                    services.AddSingleton(_ =>
                         new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(args[0],
                             new GrpcChannelOptions() { Credentials = ChannelCredentials.Insecure })));
                     services.AddSingleton<IIdGenerator<int>, IntegerIdGenerator>();

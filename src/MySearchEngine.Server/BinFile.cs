@@ -1,6 +1,6 @@
 ﻿namespace MySearchEngine.Server
 {
-    public class BinPath
+    public class BinFile
     {
         /// <summary>
         /// The file path for inverted index

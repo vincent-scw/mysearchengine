@@ -41,7 +41,7 @@ namespace MySearchEngine.Server
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MySearchEngine.Server", Version = "v1" });
             });
 
-            services.Configure<BinPath>(Configuration.GetSection(nameof(BinPath)));
+            services.Configure<BinFile>(Configuration.GetSection(nameof(BinFile)));
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
