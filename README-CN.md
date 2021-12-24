@@ -35,9 +35,13 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
 
 1. 索引创建阶段
    
+   ![textanalyzer](res/textanalyzer.png)
    
 1. 索引数据保存阶段
 
+   - 将每一个Term以```{term}|{termId}```的格式保存为term.bin文件
+   - 将每一个Doc以```{docId}|{url}|{allTermsInDoc}```的格式保存为doc.bin文件
+   - 将倒排索引以```{termId}|{docId}:{termCountInDoc},...```的格式保存为index.bin文件(注：用逗号分隔每一个doc)
 
 1. 搜索阶段
-
+   用TF-IDF进行算分
