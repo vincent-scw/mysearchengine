@@ -17,12 +17,12 @@ namespace MySearchEngine.Server.Core
             _binFile = binFileOptions.Value;
         }
 
-        public async Task StoreTermsAsync(IDictionary<int, string> termDictionary)
+        public async Task StoreTermsAsync(IDictionary<string, int> termDictionary)
         {
             await using var stream = ReadFileAsync(_binFile.Term);
-            foreach (var (id, term) in termDictionary)
+            foreach (var (term, id) in termDictionary)
             {
-                await stream.WriteLineAsync($"{id}|{term}");
+                await stream.WriteLineAsync($"{term}|{id}");
             }
         }
 
@@ -51,15 +51,15 @@ namespace MySearchEngine.Server.Core
             return JsonConvert.DeserializeObject<List<string>>(stopWordsStr);
         }
 
-        public async Task<IDictionary<int, string>> ReadTermsAsync()
+        public async Task<IDictionary<string, int>> ReadTermsAsync()
         {
             var lines = await ReadLinesAsync(_binFile.Term);
-            var ret = new Dictionary<int, string>();
+            var ret = new Dictionary<string, int>();
             foreach (var line in lines)
             {
                 var parts = line.Split('|');
                 if (parts.Length != 2) continue;
-                ret.TryAdd(Convert.ToInt32(parts[0]), parts[1]);
+                ret.TryAdd(parts[1], Convert.ToInt32(parts[0]));
             }
 
             return ret;

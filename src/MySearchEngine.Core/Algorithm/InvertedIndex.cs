@@ -24,5 +24,10 @@ namespace MySearchEngine.Core.Algorithm
                 _termPageMapping.TryAdd(termId, list);
             }
         }
+
+        public bool TryGetIndexedPages(int termId, out List<(int pageId, int termCount)> pages)
+        {
+            return _termPageMapping.TryGetValue(termId, out pages);
+        }
     }
 }

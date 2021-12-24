@@ -16,13 +16,10 @@ namespace MySearchEngine.Server.Core
 
         private TextAnalyzer _textAnalyzer;
         private InvertedIndex _invertedIndex;
-        public InvertedIndex InvertedIndex => _invertedIndex;
 
-        private IDictionary<int, string> _termDictionary;
-        public IDictionary<int, string> TermDictionary => _termDictionary;
+        private IDictionary<string, int> _termDictionary;
 
         private IDictionary<int, PageInfo> _pageDictionary;
-        public IDictionary<int, PageInfo> PageDictionary => _pageDictionary;
 
         private readonly SemaphoreSlim _semaphoreSlim;
         private int _newAfterStoreCount;
@@ -73,7 +70,7 @@ namespace MySearchEngine.Server.Core
 
                 tokens.ForEach(t =>
                 {
-                    _termDictionary.TryAdd(t.Id, t.Term);
+                    _termDictionary.TryAdd(t.Term, t.Id);
                     _invertedIndex.Index(t, page.Id);
                 });
                 _pageDictionary.TryAdd(page.Id, page);
@@ -105,6 +102,25 @@ namespace MySearchEngine.Server.Core
             {
                 _semaphoreSlim.Release();
             }
+        }
+
+        public int GetTotalPagesCount()
+        {
+            return _pageDictionary.Count;
+        }
+
+        public bool TryGetIndexedPages(string term, out List<(int pageId, int termCount)> pages)
+        {
+            if (_termDictionary.TryGetValue(term, out int termId))
+                return _invertedIndex.TryGetIndexedPages(termId, out pages);
+
+            pages = null;
+            return false;
+        }
+
+        public bool TryGetPageInfo(int pageId, out PageInfo pi)
+        {
+            return _pageDictionary.TryGetValue(pageId, out pi);
         }
     }
 }
