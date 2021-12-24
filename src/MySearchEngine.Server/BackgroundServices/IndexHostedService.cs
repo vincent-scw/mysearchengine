@@ -12,12 +12,12 @@ namespace MySearchEngine.Server.BackgroundServices
     class IndexHostedService : BackgroundService
     {
         private readonly QueueSvc.QueueSvcClient _queueClient;
-        private readonly PageIndexer _pageIndexer;
+        private readonly DocIndexer _pageIndexer;
         private readonly ILogger<IndexHostedService> _logger;
 
         public IndexHostedService(
             QueueSvc.QueueSvcClient queueClient,
-            PageIndexer pageIndexer,
+            DocIndexer pageIndexer,
             ILogger<IndexHostedService> logger)
         {
             _queueClient = queueClient;

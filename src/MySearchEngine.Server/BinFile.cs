@@ -11,9 +11,9 @@
         /// </summary>
         public string Term { get; set; }
         /// <summary>
-        /// The file path for Page
+        /// The file path for Doc
         /// </summary>
-        public string Page { get; set; }
+        public string Doc { get; set; }
         /// <summary>
         /// The file path for term offset in inverted index file
         /// </summary>

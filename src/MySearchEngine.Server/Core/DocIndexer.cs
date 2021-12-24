@@ -11,7 +11,7 @@ using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Core
 {
-    public class PageIndexer
+    public class DocIndexer
     {
         private readonly BinRepository _binRepository;
 
@@ -20,11 +20,11 @@ namespace MySearchEngine.Server.Core
 
         private IDictionary<string, int> _termDictionary;
 
-        private IDictionary<int, DocInfo> _pageDictionary;
+        private IDictionary<int, DocInfo> _docDictionary;
 
         private readonly SemaphoreSlim _semaphoreSlim;
         private int _newAfterStoreCount;
-        public PageIndexer(
+        public DocIndexer(
             BinRepository binRepository)
         {
             _binRepository = binRepository;
@@ -42,7 +42,7 @@ namespace MySearchEngine.Server.Core
         public async Task InitAsync()
         {
             _termDictionary = await _binRepository.ReadTermsAsync();
-            _pageDictionary = await _binRepository.ReadPagesAsync();
+            _docDictionary = await _binRepository.ReadDocsAsync();
             _invertedIndex = new InvertedIndex(await _binRepository.ReadIndexAsync());
 
             _textAnalyzer = new TextAnalyzer(
@@ -74,7 +74,7 @@ namespace MySearchEngine.Server.Core
                     _termDictionary.TryAdd(t.Term, t.Id);
                     _invertedIndex.Index(t, page.Id);
                 });
-                _pageDictionary.TryAdd(page.Id, page);
+                _docDictionary.TryAdd(page.Id, page);
             }
             finally
             {
@@ -93,7 +93,7 @@ namespace MySearchEngine.Server.Core
                 // Store term dict
                 await _binRepository.StoreTermsAsync(_termDictionary);
                 // Store page info
-                await _binRepository.StorePagesAsync(_pageDictionary);
+                await _binRepository.StoreDocsAsync(_docDictionary);
                 // Store inverted index
                 await _binRepository.StoreIndexAsync(_invertedIndex.TermPageMapping);
 
@@ -105,23 +105,23 @@ namespace MySearchEngine.Server.Core
             }
         }
 
-        public int GetTotalPagesCount()
+        public int GetTotalDocCount()
         {
-            return _pageDictionary.Count;
+            return _docDictionary.Count;
         }
 
-        public bool TryGetIndexedPages(string term, out List<TermInDoc> pages)
+        public bool TryGetIndexedDocs(string term, out List<TermInDoc> pages)
         {
             if (_termDictionary.TryGetValue(term, out int termId))
-                return _invertedIndex.TryGetIndexedPages(termId, out pages);
+                return _invertedIndex.TryGetIndexedDocs(termId, out pages);
 
             pages = null;
             return false;
         }
 
-        public bool TryGetPageInfo(int pageId, out DocInfo pi)
+        public bool TryGetDocInfo(int pageId, out DocInfo pi)
         {
-            return _pageDictionary.TryGetValue(pageId, out pi);
+            return _docDictionary.TryGetValue(pageId, out pi);
         }
     }
 }

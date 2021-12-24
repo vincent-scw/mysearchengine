@@ -23,7 +23,7 @@ namespace MySearchEngine.Core.Algorithm
             }
         }
 
-        public bool TryGetIndexedPages(int termId, out List<TermInDoc> pages)
+        public bool TryGetIndexedDocs(int termId, out List<TermInDoc> pages)
         {
             return _termPageMapping.TryGetValue(termId, out pages);
         }

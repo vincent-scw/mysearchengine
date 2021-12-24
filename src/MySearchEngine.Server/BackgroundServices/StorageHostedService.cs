@@ -9,13 +9,13 @@ namespace MySearchEngine.Server.BackgroundServices
 {
     class StorageHostedService : BackgroundService
     {
-        private readonly PageIndexer _pageIndexer;
+        private readonly DocIndexer _docIndexer;
         private readonly ILogger<StorageHostedService> _logger;
         public StorageHostedService(
-            PageIndexer pageIndexer,
+            DocIndexer docIndexer,
             ILogger<StorageHostedService> logger)
         {
-            _pageIndexer = pageIndexer;
+            _docIndexer = docIndexer;
             _logger = logger;
         }
         
@@ -34,7 +34,7 @@ namespace MySearchEngine.Server.BackgroundServices
                 try
                 {
                     // Store to disk every 15 seconds
-                    await _pageIndexer.StoreDataAsync();
+                    await _docIndexer.StoreDataAsync();
                 }
                 catch (Exception ex)
                 {

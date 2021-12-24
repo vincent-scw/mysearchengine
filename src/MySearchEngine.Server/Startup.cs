@@ -37,7 +37,7 @@ namespace MySearchEngine.Server
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
-            services.AddSingleton<PageIndexer>();
+            services.AddSingleton<DocIndexer>();
             services.AddSingleton<SearchEngine>();
             services.AddTransient<BinRepository>();
             services.AddHostedService<IndexHostedService>();

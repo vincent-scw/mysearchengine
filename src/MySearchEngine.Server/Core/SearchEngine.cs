@@ -12,11 +12,11 @@ namespace MySearchEngine.Server.Core
 {
     public class SearchEngine
     {
-        private readonly PageIndexer _pageIndexer;
+        private readonly DocIndexer _pageIndexer;
 
         private readonly TextAnalyzer _textAnalyzer;
         public SearchEngine(
-            PageIndexer pageIndexer)
+            DocIndexer pageIndexer)
         {
             _pageIndexer = pageIndexer;
             _textAnalyzer = new TextAnalyzer(new List<ICharacterFilter>(),
@@ -37,12 +37,12 @@ namespace MySearchEngine.Server.Core
             {
                 var term = t.Term;
                 // Find indexed pages
-                if (!_pageIndexer.TryGetIndexedPages(term, out List<TermInDoc> docs))
+                if (!_pageIndexer.TryGetIndexedDocs(term, out List<TermInDoc> docs))
                     return new List<TermDocScore>();
 
                 return docs.Select(p =>
                 {
-                    if (!_pageIndexer.TryGetPageInfo(p.DocId, out DocInfo pi))
+                    if (!_pageIndexer.TryGetDocInfo(p.DocId, out DocInfo pi))
                         return (TermDocScore)null;
 
                     // Use TF-IDF to calculate the score
@@ -50,7 +50,7 @@ namespace MySearchEngine.Server.Core
                         Tf_Idf.Calculate(
                             p.TermInDocCount, 
                             pi.TokenCount, 
-                            _pageIndexer.GetTotalPagesCount(),
+                            _pageIndexer.GetTotalDocCount(),
                             docs.Count));
                 }).Where(x => x != null).ToList();
             }).ToList();
