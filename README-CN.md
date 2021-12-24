@@ -1,9 +1,9 @@
-# mysearchengine
+# MySearchEngine
 
-MySearchEngine 是一个学习与实践文本搜索相关知识的个人项目。它是用C#语言基于.Net 5.0开发。
+MySearchEngine 是一个学习与实践文本搜索相关知识的个人项目。它基于C#语言在.Net 5.0环境下开发。
 
 ## 目标
-我觉得[DifferenceBetween](https://www.differencebetween.com)是一个不错的网站。所以我想对它做一下内容爬取，并且可以对爬得的数据做个简单的搜索引擎。但是因为DifferenceBetween上面的大部分文章内容太过于学术化，所以我们就选取容易理解的[Language Category](https://www.differencebetween.com/category/language/)来开始爬取……
+尽量不使用第三方工具，自己实现一个简单的搜索引擎。其数据来源于网络。我们从爬取某网页开始，然后分析内容，创建索引。最后能够完成搜索，并按照得分顺序返回结果。
 
 ## 项目结构
 MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
@@ -24,8 +24,10 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
 
   Server端对网络爬虫爬得的HTML内容创建索引，并提供搜索的API端口。
 
-## 过程分享
-1. 实现一个网络爬虫
-2. 实现索引的创建
-3. 保存索引数据
-4. 实现搜索功能
+## 阶段&过程
+1. 网络爬虫阶段
+   在爬虫阶段，我觉得[DifferenceBetween](https://www.differencebetween.com)是一个不错的网站。所以我想对它做一下内容爬取。但是因为DifferenceBetween上面的大部分文章内容太过于学术化，所以我们就选取容易理解的[Language Category](https://www.differencebetween.com/category/language/)开始吧……
+
+1. 索引创建阶段
+1. 索引数据保存阶段
+1. 搜索阶段
