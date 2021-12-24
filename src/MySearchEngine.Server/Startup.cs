@@ -64,7 +64,7 @@ namespace MySearchEngine.Server
             services.AddSingleton<PageIndexer>();
             services.AddSingleton((sp) =>
             {
-                return new InvertedIndex(new Dictionary<int, List<int>>());
+                return new InvertedIndex(new Dictionary<int, List<(int, int)>>());
             });
             services.AddTransient<BinRepository>();
             services.AddHostedService<IndexHostedService>();

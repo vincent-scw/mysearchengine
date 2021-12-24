@@ -2,15 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MySearchEngine.Server.Core
 {
     public class BinRepository
     {
-        private const string GENERAL_FORMAT = "{0}|{1}";
-        private const string PAGE_FORMAT = "{0}|{1}|{2}";
-
         private readonly BinPath _binPath;
         public BinRepository(IOptions<BinPath> binPath)
         {
@@ -22,7 +20,7 @@ namespace MySearchEngine.Server.Core
             await using var stream = File.CreateText(_binPath.Term);
             foreach (var (id, term) in termDictionary)
             {
-                await stream.WriteLineAsync(string.Format(GENERAL_FORMAT, id, term));
+                await stream.WriteLineAsync($"{id}|{term}");
             }
         }
 
@@ -31,16 +29,17 @@ namespace MySearchEngine.Server.Core
             await using var stream = File.CreateText(_binPath.Page);
             foreach (var (id, pi) in pageDictionary)
             {
-                await stream.WriteLineAsync(string.Format(PAGE_FORMAT, id, pi.Title, pi.Url));
+                await stream.WriteLineAsync($"{id}|{pi.Title}|{pi.Url}");
             }
         }
 
-        public async Task StoreIndexAsync(IReadOnlyDictionary<int, List<int>> indexDictionary)
+        public async Task StoreIndexAsync(IReadOnlyDictionary<int, List<(int pageId, int termCount)>> indexDictionary)
         {
             await using var stream = File.CreateText(_binPath.Index);
-            foreach (var (termId, pageIds) in indexDictionary)
+            foreach (var (termId, pages) in indexDictionary)
             {
-                await stream.WriteLineAsync(string.Format(GENERAL_FORMAT, termId, string.Join(',', pageIds)));
+                await stream.WriteLineAsync(
+                    $"{termId}|{string.Join(',', pages.Select(x => $"{x.pageId}:${x.termCount}"))}");
             }
         }
 

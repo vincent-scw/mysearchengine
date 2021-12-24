@@ -34,6 +34,8 @@ namespace MySearchEngine.Server.Core
         public void Index(PageInfo page, string content)
         {
             var tokens = _textAnalyzer.Analyze(content);
+            page.TokenCount = tokens.Count;
+
             _semaphoreSlim.Wait();
             try
             {
@@ -42,7 +44,7 @@ namespace MySearchEngine.Server.Core
                 tokens.ForEach(t =>
                 {
                     _termDictionary.TryAdd(t.Id, t.Term);
-                    _invertedIndex.Index(t.Id, page.Id);
+                    _invertedIndex.Index(t, page.Id);
                 });
                 _pageDictionary.TryAdd(page.Id, page);
             }
