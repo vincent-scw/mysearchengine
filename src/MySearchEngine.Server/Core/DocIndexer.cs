@@ -59,10 +59,10 @@ namespace MySearchEngine.Server.Core
                 });
         }
 
-        public void Index(DocInfo page, string content)
+        public void Index(DocInfo doc, string content)
         {
             var tokens = _textAnalyzer.Analyze(content);
-            page.TokenCount = tokens.Count;
+            doc.SetTokenCount(tokens.Count);
 
             _semaphoreSlim.Wait();
             try
@@ -72,9 +72,9 @@ namespace MySearchEngine.Server.Core
                 tokens.ForEach(t =>
                 {
                     _termDictionary.TryAdd(t.Term, t.Id);
-                    _invertedIndex.Index(t, page.Id);
+                    _invertedIndex.Index(t, doc.DocId);
                 });
-                _docDictionary.TryAdd(page.Id, page);
+                _docDictionary.TryAdd(doc.DocId, doc);
             }
             finally
             {

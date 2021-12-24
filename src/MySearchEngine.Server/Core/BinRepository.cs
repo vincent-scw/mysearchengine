@@ -75,12 +75,12 @@ namespace MySearchEngine.Server.Core
                 var parts = line.Split('|');
                 if (parts.Length != 4) continue;
                 ret.TryAdd(Convert.ToInt32(parts[0]), new DocInfo
-                {
-                    Id = Convert.ToInt32(parts[0]),
-                    Title = parts[1],
-                    Url = parts[2],
-                    TokenCount = Convert.ToInt32(parts[3])
-                });
+                (
+                    Convert.ToInt32(parts[0]),
+                    parts[1],
+                    parts[2],
+                    Convert.ToInt32(parts[3])
+                ));
             }
 
             return ret;

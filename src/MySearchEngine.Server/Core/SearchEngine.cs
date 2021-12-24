@@ -56,7 +56,7 @@ namespace MySearchEngine.Server.Core
             }).ToList();
 
             // Sum up all token scores by page
-            var ret = indexedDocs.GroupBy(ip => ip.DocInfo.Id)
+            var ret = indexedDocs.GroupBy(ip => ip.DocInfo.DocId)
                 .Select(x =>
                 {
                     var doc = x.First();

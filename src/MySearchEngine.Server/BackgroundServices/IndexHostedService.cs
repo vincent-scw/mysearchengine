@@ -12,16 +12,16 @@ namespace MySearchEngine.Server.BackgroundServices
     class IndexHostedService : BackgroundService
     {
         private readonly QueueSvc.QueueSvcClient _queueClient;
-        private readonly DocIndexer _pageIndexer;
+        private readonly DocIndexer _docIndexer;
         private readonly ILogger<IndexHostedService> _logger;
 
         public IndexHostedService(
             QueueSvc.QueueSvcClient queueClient,
-            DocIndexer pageIndexer,
+            DocIndexer docIndexer,
             ILogger<IndexHostedService> logger)
         {
             _queueClient = queueClient;
-            _pageIndexer = pageIndexer;
+            _docIndexer = docIndexer;
             _logger = logger;
         }
 
@@ -47,8 +47,8 @@ namespace MySearchEngine.Server.BackgroundServices
                 try
                 {
                     // Don't need to store page content
-                    var pageInfo = new DocInfo() { Id = message.Id, Title = message.Title, Url = message.Url };
-                    _pageIndexer.Index(pageInfo, message.Body);
+                    var docInfo = new DocInfo(message.Id, message.Title, message.Url);
+                    _docIndexer.Index(docInfo, message.Body);
 
                     await _queueClient.AckAsync(message);
                 }
