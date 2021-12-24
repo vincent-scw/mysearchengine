@@ -7,17 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using MySearchEngine.Core.Algorithm;
-using MySearchEngine.Core.Analyzer;
-using MySearchEngine.Core.Analyzer.CharacterFilters;
-using MySearchEngine.Core.Analyzer.TokenFilters;
-using MySearchEngine.Core.Analyzer.Tokenizers;
-using MySearchEngine.Core.Utilities;
 using MySearchEngine.Server.BackgroundServices;
 using MySearchEngine.Server.Core;
-using Newtonsoft.Json;
 using Qctrl;
-using System.Collections.Generic;
 using System.IO;
 
 namespace MySearchEngine.Server
@@ -45,23 +37,8 @@ namespace MySearchEngine.Server
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
-            services.AddSingleton((sp) =>
-            {
-                var stopWordsStr = File.ReadAllText("..\\..\\res\\stop_words_english.json");
-                return new TextAnalyzer(
-                    new List<ICharacterFilter>
-                    {
-                        new HtmlElementFilter()
-                    },
-                    new SimpleTokenizer(new GlobalTermIdGenerator()),
-                    new List<ITokenFilter>
-                    {
-                        new LowercaseTokenFilter(),
-                        new StemmerTokenFilter(),
-                        new StopWordTokenFilter(JsonConvert.DeserializeObject<List<string>>(stopWordsStr))
-                    });
-            });
             services.AddSingleton<PageIndexer>();
+            services.AddSingleton<SearchEngine>();
             services.AddTransient<BinRepository>();
             services.AddHostedService<IndexHostedService>();
             services.AddHostedService<StorageHostedService>();

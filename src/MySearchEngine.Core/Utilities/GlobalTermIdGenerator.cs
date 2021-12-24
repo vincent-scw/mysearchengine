@@ -7,9 +7,9 @@ namespace MySearchEngine.Core.Utilities
         private readonly IntegerIdGenerator _idGenerator;
         private readonly ConcurrentDictionary<string, int> _termIdDict;
 
-        public GlobalTermIdGenerator()
+        public GlobalTermIdGenerator(int seed)
         {
-            _idGenerator = new IntegerIdGenerator();
+            _idGenerator = new IntegerIdGenerator(seed);
             _termIdDict = new ConcurrentDictionary<string, int>();
         }
 

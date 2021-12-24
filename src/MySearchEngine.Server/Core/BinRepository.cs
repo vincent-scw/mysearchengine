@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using File = System.IO.File;
 
 namespace MySearchEngine.Server.Core
@@ -42,6 +43,12 @@ namespace MySearchEngine.Server.Core
                 await stream.WriteLineAsync(
                     $"{termId}|{string.Join(',', pages.Select(x => $"{x.pageId}:{x.termCount}"))}");
             }
+        }
+
+        public async Task<List<string>> ReadStopWordsAsync()
+        {
+            var stopWordsStr = await File.ReadAllTextAsync("..\\..\\res\\stop_words_english.json");
+            return JsonConvert.DeserializeObject<List<string>>(stopWordsStr);
         }
 
         public async Task<IDictionary<int, string>> ReadTermsAsync()
