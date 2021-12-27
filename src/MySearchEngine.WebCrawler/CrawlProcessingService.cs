@@ -13,20 +13,21 @@ namespace MySearchEngine.WebCrawler
         private readonly IPageReader _pageReader;
         private readonly IIdGenerator<int> _idGenerator;
         private readonly QueueSvc.QueueSvcClient _queueClient;
-        private readonly BooleanFilter _booleanFilter;
-        private readonly BinRepository _binRepository;
+        private readonly IRepository _binRepository;
+
+        private readonly BloomFilter _bloomFilter;
 
         public CrawlProcessingService(
             IPageReader pageReader,
             IIdGenerator<int> idGenerator,
-            BinRepository binRepository,
+            IRepository binRepository,
             QueueSvc.QueueSvcClient queueClient)
         {
             _pageReader = pageReader;
             _idGenerator = idGenerator;
             _queueClient = queueClient;
             _binRepository = binRepository;
-            _booleanFilter = new BooleanFilter(binRepository.ReadBooleanFilterAsync(100_000).Result);
+            _bloomFilter = new BloomFilter(binRepository.ReadBooleanFilterAsync(100_000).Result);
         }
 
         public void DoWork(string url, CancellationToken cancellationToken)
@@ -47,7 +48,7 @@ namespace MySearchEngine.WebCrawler
 
             foreach (var link in pi.Links)
             {
-                if (!_booleanFilter.TryAdd(link))
+                if (!_bloomFilter.TryAdd(link))
                     continue;
 
                 await CrawlAsync(link, cancellationToken);
@@ -59,7 +60,7 @@ namespace MySearchEngine.WebCrawler
             Console.Write($"Reading page at: {url}");
             var pi = await _pageReader.ReadAsync(new Uri(url));
             // Add title to boolean filter as well, to avoid different links target to same page
-            if (pi == null || !_booleanFilter.TryAdd(pi.Title))
+            if (pi == null || !_bloomFilter.TryAdd(pi.Title))
             {
                 Console.WriteLine("  Ignored.");
                 return null;
@@ -87,7 +88,7 @@ namespace MySearchEngine.WebCrawler
                 try
                 {
                     // Store to disk every 15 seconds
-                    await _binRepository.StoreBooleanFilterAsync(_booleanFilter.BooleanArray);
+                    await _binRepository.StoreBooleanFilterAsync(_bloomFilter.BooleanArray);
                 }
                 catch (Exception ex)
                 {

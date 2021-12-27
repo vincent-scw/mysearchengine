@@ -39,7 +39,7 @@ namespace MySearchEngine.WebCrawler
             return Host.CreateDefaultBuilder(args)
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddSingleton<BinRepository>();
+                    services.AddSingleton<IRepository, BinRepository>();
                     services.AddSingleton<IProcessingService, CrawlProcessingService>();
                     services.AddSingleton<IPageReader, PageReader>();
                     services.AddSingleton<CrawlerConfig>();

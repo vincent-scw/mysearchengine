@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MySearchEngine.WebCrawler
 {
-    class BinRepository
+    class BinRepository : IRepository
     {
         private const string BF_BIN = "bf.bin";
 

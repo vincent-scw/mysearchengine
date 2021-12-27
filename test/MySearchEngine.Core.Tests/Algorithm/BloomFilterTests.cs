@@ -3,15 +3,15 @@ using Xunit;
 
 namespace MySearchEngine.Core.Tests.Algorithm
 {
-    public class BooleanFilterTests
+    public class BloomFilterTests
     {
         [Fact]
         public void Should_AsExpected()
         {
-            var bf = new BooleanFilter(100);
-            var result = bf.TryAdd("boolean filter");
+            var bf = new BloomFilter(100);
+            var result = bf.TryAdd("bloom filter");
             Assert.True(result);
-            result = bf.TryAdd("boolean filter");
+            result = bf.TryAdd("bloom filter");
             Assert.False(result);
         }
     }

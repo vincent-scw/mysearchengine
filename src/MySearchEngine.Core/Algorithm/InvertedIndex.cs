@@ -5,7 +5,7 @@ namespace MySearchEngine.Core.Algorithm
     public class InvertedIndex
     {
         private readonly Dictionary<int, List<TermInDoc>> _termPageMapping;
-        public IReadOnlyDictionary<int, List<TermInDoc>> TermPageMapping => _termPageMapping;
+        public IDictionary<int, List<TermInDoc>> TermPageMapping => _termPageMapping;
         public InvertedIndex(IDictionary<int, List<TermInDoc>> termPageMapping)
         {
             _termPageMapping = new Dictionary<int, List<TermInDoc>>(termPageMapping);

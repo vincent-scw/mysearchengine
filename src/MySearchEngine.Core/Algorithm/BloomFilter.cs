@@ -4,16 +4,16 @@ using System.Text;
 
 namespace MySearchEngine.Core.Algorithm
 {
-    public class BooleanFilter
+    public class BloomFilter
     {
         private bool[] _bArray;
         public bool[] BooleanArray => _bArray;
-        public BooleanFilter(int capacity)
+        public BloomFilter(int capacity)
         {
             _bArray = new bool[capacity];
         }
 
-        public BooleanFilter(bool[] init)
+        public BloomFilter(bool[] init)
         {
             _bArray = init;
         }

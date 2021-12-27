@@ -1,16 +1,17 @@
-﻿using Microsoft.Extensions.Options;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using MySearchEngine.Core;
+using MySearchEngine.Server.Core;
 using Newtonsoft.Json;
 using File = System.IO.File;
 
-namespace MySearchEngine.Server.Core
+namespace MySearchEngine.Server
 {
-    public class BinRepository
+    public class BinRepository : IRepository
     {
         private readonly BinFile _binFile;
         public BinRepository(IOptions<BinFile> binFileOptions)
@@ -36,7 +37,7 @@ namespace MySearchEngine.Server.Core
             }
         }
 
-        public async Task StoreIndexAsync(IReadOnlyDictionary<int, List<TermInDoc>> indexDictionary)
+        public async Task StoreIndexAsync(IDictionary<int, List<TermInDoc>> indexDictionary)
         {
             await using var stream = ReadFileAsync(_binFile.Index);
             foreach (var (termId, pages) in indexDictionary)

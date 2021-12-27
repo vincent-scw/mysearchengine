@@ -13,7 +13,7 @@ namespace MySearchEngine.Server.Core
 {
     public class DocIndexer
     {
-        private readonly BinRepository _binRepository;
+        private readonly IRepository _binRepository;
 
         private TextAnalyzer _textAnalyzer;
         private InvertedIndex _invertedIndex;
@@ -25,7 +25,7 @@ namespace MySearchEngine.Server.Core
         private readonly SemaphoreSlim _semaphoreSlim;
         private int _newAfterStoreCount;
         public DocIndexer(
-            BinRepository binRepository)
+            IRepository binRepository)
         {
             _binRepository = binRepository;
             

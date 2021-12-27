@@ -39,7 +39,7 @@ namespace MySearchEngine.Server
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));
             services.AddSingleton<DocIndexer>();
             services.AddSingleton<SearchEngine>();
-            services.AddTransient<BinRepository>();
+            services.AddTransient<IRepository, BinRepository>();
             services.AddHostedService<IndexHostedService>();
             services.AddHostedService<StorageHostedService>();
         }
