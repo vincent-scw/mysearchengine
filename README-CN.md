@@ -70,7 +70,7 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    > |[SimpleTokenizer](src/MySearchEngine.Core/Analyzer/Tokenizers/SimpleTokenizer.cs)|Split text to tokens by whitespace. Leave only letters & digits.|["The", "QUICK", "brown", "fox", "jumps"]|
    > |[LowercaseTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/LowercaseTokenFilter.cs)|Update tokens to lowercased.|["the", "quick", "brown", "fox", "jumps"]|
    > |[StemmerTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StemmerTokenFilter.cs)|Update tokens to its stem using [PorterStemmer](https://iq.opengenus.org/porter-stemmer/).|["the", "quick", "brown", "fox", "jump"]|
-   > ||||
+   > |[StopWordTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StopWordTokenFilter.cs)|Remove tokens of stop words.|["quick", "brown", "fox", "jump"]|
    >
    > 详情请参考[Analyzer Anatomy](https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer-anatomy.html)
    
