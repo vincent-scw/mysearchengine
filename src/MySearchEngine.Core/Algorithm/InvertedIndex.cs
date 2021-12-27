@@ -15,10 +15,10 @@ namespace MySearchEngine.Core.Algorithm
         {
             var termId = token.Id;
             if (_termPageMapping.TryGetValue(termId, out List<TermInDoc> list))
-                list.Add(new TermInDoc(termId, pageId, token.TermInDocCount));
+                list.Add(new TermInDoc(termId, pageId, token.TermsInDoc));
             else
             {
-                list = new List<TermInDoc> { new TermInDoc(termId, pageId, token.TermInDocCount)};
+                list = new List<TermInDoc> { new TermInDoc(termId, pageId, token.TermsInDoc)};
                 _termPageMapping.TryAdd(termId, list);
             }
         }

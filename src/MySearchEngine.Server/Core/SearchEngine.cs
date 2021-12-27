@@ -48,7 +48,7 @@ namespace MySearchEngine.Server.Core
                     // Use TF-IDF to calculate the score
                     return new TermDocScore(term, pi,
                         Tf_Idf.Calculate(
-                            p.TermInDocCount, 
+                            p.TermsInDoc, 
                             pi.TokenCount, 
                             _pageIndexer.GetTotalDocCount(),
                             docs.Count));

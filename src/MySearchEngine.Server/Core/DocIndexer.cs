@@ -1,13 +1,9 @@
-﻿using MySearchEngine.Core.Algorithm;
-using MySearchEngine.Core.Analyzer;
-using MySearchEngine.Core.Analyzer.CharacterFilters;
-using MySearchEngine.Core.Analyzer.TokenFilters;
-using MySearchEngine.Core.Analyzer.Tokenizers;
+﻿using MySearchEngine.Core;
+using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Core
 {
@@ -15,12 +11,12 @@ namespace MySearchEngine.Server.Core
     {
         private readonly IRepository _binRepository;
 
-        private TextAnalyzer _textAnalyzer;
         private InvertedIndex _invertedIndex;
 
         private IDictionary<string, int> _termDictionary;
-
         private IDictionary<int, DocInfo> _docDictionary;
+        private IIdGenerator<int> _idGenerator;
+        private IEnumerable<string> _stopWords;
 
         private readonly SemaphoreSlim _semaphoreSlim;
         private int _newAfterStoreCount;
@@ -28,7 +24,7 @@ namespace MySearchEngine.Server.Core
             IRepository binRepository)
         {
             _binRepository = binRepository;
-            
+
             _semaphoreSlim = new SemaphoreSlim(1, 1);
             _newAfterStoreCount = 0;
 
@@ -43,25 +39,16 @@ namespace MySearchEngine.Server.Core
         {
             _termDictionary = await _binRepository.ReadTermsAsync();
             _docDictionary = await _binRepository.ReadDocsAsync();
-            _invertedIndex = new InvertedIndex(await _binRepository.ReadIndexAsync());
+            _stopWords = await _binRepository.ReadStopWordsAsync();
 
-            _textAnalyzer = new TextAnalyzer(
-                new List<ICharacterFilter>
-                {
-                    new HtmlElementFilter()
-                },
-                new SimpleTokenizer(new GlobalTermIdGenerator(_termDictionary.Count)), // id should be generated from term count
-                new List<ITokenFilter>
-                {
-                    new LowercaseTokenFilter(),
-                    new StemmerTokenFilter(),
-                    new StopWordTokenFilter(await _binRepository.ReadStopWordsAsync())
-                });
+            _invertedIndex = new InvertedIndex(await _binRepository.ReadIndexAsync());
+            _idGenerator = new GlobalTermIdGenerator(_termDictionary.Count);
         }
 
         public void Index(DocInfo doc, string content)
         {
-            var tokens = _textAnalyzer.Analyze(content);
+            var textAnalyzer = AnalyzerBuilder.BuildTextAnalyzer(_idGenerator, _stopWords);
+            var tokens = textAnalyzer.Analyze(content);
             doc.SetTokenCount(tokens.Count);
 
             _semaphoreSlim.Wait();
