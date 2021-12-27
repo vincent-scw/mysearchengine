@@ -1,11 +1,16 @@
 # MySearchEngine
 
-[English](.\README.md)|中文
+[English](README.md) | 中文
 
 MySearchEngine 是一个学习与实践文本搜索相关知识的个人项目。它基于C#语言在.Net 5.0环境下开发。
 
 ## 目标
 尽量不使用第三方工具，自己实现一个简单的搜索引擎。其数据来源于网络。我们从爬取某网页开始，然后分析内容，创建索引。最后能够完成搜索，并按照得分顺序返回结果。
+
+## 如何启动
+1. 启动[QueueService](start_queue.bat).
+1. 启动[WebCrawler](start_crawler.bat).
+1. 启动[Server](start_sever.bat).
 
 ## 项目结构
 MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
@@ -55,22 +60,22 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    - Token filter(s)：对已经分解好的Token进行进一步的处理。比如转化为小写，合并相同词根，添加同义词等等。 
    
    
-   > 文本分析过程  
+   > ***文本分析***过程  
    >
    > ![textanalyzer](res/textanalyzer.png)  
    > 
-   > Take an example of input:  
+   > 以如下内容作为例子：  
    > ```html
    > <div><p>The QUICK brown fox jumps.</p></div>
    > ```
    > 
-   > |Process|Description|Outcome|
+   > |加工|描述|输出|
    > |---|---|---|
-   > |[HtmlElementFilter](src/MySearchEngine.Core/Analyzer/CharacterFilters/HtmlElementFilter.cs)|Remove Html elements. |The QUICK brown fox jumps. |
-   > |[SimpleTokenizer](src/MySearchEngine.Core/Analyzer/Tokenizers/SimpleTokenizer.cs)|Split text to tokens by whitespace. Leave only letters & digits.|["The", "QUICK", "brown", "fox", "jumps"]|
-   > |[LowercaseTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/LowercaseTokenFilter.cs)|Update tokens to lowercased.|["the", "quick", "brown", "fox", "jumps"]|
-   > |[StemmerTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StemmerTokenFilter.cs)|Update tokens to its stem using [PorterStemmer](https://iq.opengenus.org/porter-stemmer/).|["the", "quick", "brown", "fox", "jump"]|
-   > |[StopWordTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StopWordTokenFilter.cs)|Remove tokens of stop words.|["quick", "brown", "fox", "jump"]|
+   > |[HtmlElementFilter](src/MySearchEngine.Core/Analyzer/CharacterFilters/HtmlElementFilter.cs)|删除HTML元素。 |The QUICK brown fox jumps. |
+   > |[SimpleTokenizer](src/MySearchEngine.Core/Analyzer/Tokenizers/SimpleTokenizer.cs)|以whiteshpace拆分文本为一组Token。只保留字母和数字。|["The", "QUICK", "brown", "fox", "jumps"]|
+   > |[LowercaseTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/LowercaseTokenFilter.cs)|把Token更新为小写字符。|["the", "quick", "brown", "fox", "jumps"]|
+   > |[StemmerTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StemmerTokenFilter.cs)|把Token更新为它的根（ 使用[PorterStemmer](https://iq.opengenus.org/porter-stemmer/)）。|["the", "quick", "brown", "fox", "jump"]|
+   > |[StopWordTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StopWordTokenFilter.cs)|删除停止词。|["quick", "brown", "fox", "jump"]|
    >
    > 详情请参考[Analyzer Anatomy](https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer-anatomy.html)
    
@@ -90,7 +95,9 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    >
    > 详情请参考[tfidf](http://tfidf.com/)
 
-## 实现列表
+## 总结
+
+## 附：实现列表
 - [x] Web Crawler
 - [ ] Index Building
 	- [x] Character Filter
