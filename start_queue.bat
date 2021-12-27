@@ -1,1 +1,2 @@
-dotnet src\MySearchEngine.QueueService\bin\Debug\net5.0\MySearchEngine.QueueService.dll localhost 10024
+cd src\MySearchEngine.QueueService
+dotnet run localhost 10024

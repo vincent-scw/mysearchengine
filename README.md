@@ -1,5 +1,7 @@
 # MySearchEngine
 
+English|[中文](.\README-CN.md)
+
 MySearchEngine is a learning and practice project for searching. It is developed by C# language in .Net 5.0 environment.
 
 ## Target
@@ -11,22 +13,22 @@ The source data comes from internet. We will start with web crawling, text analy
 ## Processing Stage
 
 ## Features
-[x] Web Crawler
-[ ] Index Building
-	[x] Character Filter
-		[x] Html Filter
-	[ ] Tokenizer
-		[x] Simple Tokenizer
-		[ ] Support phrase
-	[ ] Token Filter
-		[x] Lowercase Filter
-		[x] Stemmer Filter
-		[x] Stop Words Filter
-		[ ] Synonym Filter
-[x] Index Storage
-	[x] Term
-	[x] Doc
-	[x] Inverted Index
-[ ] Search
-	[x] TF-IDF
-	[ ] BM25
+- [x] Web Crawler
+- [ ] Index Building
+	- [x] Character Filter
+		- [x] Html Filter
+	- [ ] Tokenizer
+		- [x] Simple Tokenizer
+		- [ ] Support phrase
+	- [ ] Token Filter
+		- [x] Lowercase Filter
+		- [x] Stemmer Filter
+		- [x] Stop Words Filter
+		- [ ] Synonym Filter
+- [x] Index Storage
+	- [x] Term
+	- [x] Doc
+	- [x] Inverted Index
+- [ ] Search
+	- [x] TF-IDF
+	- [ ] BM25

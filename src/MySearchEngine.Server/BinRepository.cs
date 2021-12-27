@@ -49,7 +49,8 @@ namespace MySearchEngine.Server
 
         public async Task<List<string>> ReadStopWordsAsync()
         {
-            var stopWordsStr = await File.ReadAllTextAsync(FindResPath("stop_words_english.json"));
+            var fileName = "stop_words_english.json";
+            var stopWordsStr = await File.ReadAllTextAsync(Path.Combine(FindResPath(fileName), fileName));
             return JsonConvert.DeserializeObject<List<string>>(stopWordsStr);
         }
 
