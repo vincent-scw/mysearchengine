@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MySearchEngine.Server.Core
 {
-    public class DocIndexer
+    public class DocIndexer : IDocIndexer
     {
         private readonly IRepository _binRepository;
 

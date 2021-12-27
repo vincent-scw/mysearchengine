@@ -1,48 +1,35 @@
-﻿using MySearchEngine.Core.Algorithm;
-using MySearchEngine.Core.Analyzer;
-using MySearchEngine.Core.Analyzer.CharacterFilters;
-using MySearchEngine.Core.Analyzer.TokenFilters;
-using MySearchEngine.Core.Analyzer.Tokenizers;
+﻿using MySearchEngine.Core;
+using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
-using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Core
 {
     public class SearchEngine
     {
-        private readonly DocIndexer _pageIndexer;
-
-        private readonly TextAnalyzer _textAnalyzer;
+        private readonly IDocIndexer _docIndexer;
+        
         public SearchEngine(
-            DocIndexer pageIndexer)
+            IDocIndexer docIndexer)
         {
-            _pageIndexer = pageIndexer;
-            _textAnalyzer = new TextAnalyzer(new List<ICharacterFilter>(),
-                new SimpleTokenizer(new IntegerIdGenerator()),
-                new List<ITokenFilter>
-                {
-                    new LowercaseTokenFilter(),
-                    new StemmerTokenFilter(),
-                    // Stop word filter is not included, so don't use stop word to do search
-                    // new StopWordTokenFilter(await _binRepository.ReadStopWordsAsync())
-                });
+            _docIndexer = docIndexer;
         }
 
         public List<TermDocScore> Search(string searchText, int size, int from)
         {
-            var tokens = _textAnalyzer.Analyze(searchText);
+            var textAnalyzer = AnalyzerBuilder.BuildTextAnalyzer(new IntegerIdGenerator(), new List<string>());
+            var tokens = textAnalyzer.Analyze(searchText);
             var indexedDocs = tokens.SelectMany(t =>
             {
                 var term = t.Term;
                 // Find indexed pages
-                if (!_pageIndexer.TryGetIndexedDocs(term, out List<TermInDoc> docs))
+                if (!_docIndexer.TryGetIndexedDocs(term, out List<TermInDoc> docs))
                     return new List<TermDocScore>();
 
                 return docs.Select(p =>
                 {
-                    if (!_pageIndexer.TryGetDocInfo(p.DocId, out DocInfo pi))
+                    if (!_docIndexer.TryGetDocInfo(p.DocId, out DocInfo pi))
                         return (TermDocScore)null;
 
                     // Use TF-IDF to calculate the score
@@ -50,7 +37,7 @@ namespace MySearchEngine.Server.Core
                         Tf_Idf.Calculate(
                             p.TermsInDoc, 
                             pi.TokenCount, 
-                            _pageIndexer.GetTotalDocCount(),
+                            _docIndexer.GetTotalDocCount(),
                             docs.Count));
                 }).Where(x => x != null).ToList();
             }).ToList();

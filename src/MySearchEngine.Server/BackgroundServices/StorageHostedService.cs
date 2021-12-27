@@ -9,10 +9,10 @@ namespace MySearchEngine.Server.BackgroundServices
 {
     class StorageHostedService : BackgroundService
     {
-        private readonly DocIndexer _docIndexer;
+        private readonly IDocIndexer _docIndexer;
         private readonly ILogger<StorageHostedService> _logger;
         public StorageHostedService(
-            DocIndexer docIndexer,
+            IDocIndexer docIndexer,
             ILogger<StorageHostedService> logger)
         {
             _docIndexer = docIndexer;

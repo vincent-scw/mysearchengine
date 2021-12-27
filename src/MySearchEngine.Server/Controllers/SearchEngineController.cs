@@ -28,6 +28,7 @@ namespace MySearchEngine.Server.Controllers
             var searchResult = _searchEngine.Search(searchText, size, from);
             return Ok(searchResult.Select(p => new
             {
+                p.DocInfo.DocId,
                 p.DocInfo.Title,
                 p.DocInfo.Url,
                 Score = Math.Round(p.Score, 4)
