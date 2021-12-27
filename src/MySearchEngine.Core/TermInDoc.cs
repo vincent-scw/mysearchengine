@@ -7,13 +7,13 @@
         /// <summary>
         /// Term occurs count in doc
         /// </summary>
-        public int TermsInDoc { get; }
+        public int Count { get; }
 
-        public TermInDoc(int termId, int docId, int termsInDoc)
+        public TermInDoc(int termId, int docId, int count)
         {
             TermId = termId;
             DocId = docId;
-            TermsInDoc = termsInDoc;
+            Count = count;
         }
     }
 }

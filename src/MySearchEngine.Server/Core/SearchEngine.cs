@@ -1,6 +1,7 @@
 ﻿using MySearchEngine.Core;
 using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,38 +17,33 @@ namespace MySearchEngine.Server.Core
             _docIndexer = docIndexer;
         }
 
-        public List<TermDocScore> Search(string searchText, int size, int from)
+        public List<SearchResultItem> Search(string searchText, int size, int from)
         {
             var textAnalyzer = AnalyzerBuilder.BuildTextAnalyzer(new IntegerIdGenerator(), new List<string>());
+            // Analyze text
             var tokens = textAnalyzer.Analyze(searchText);
-            var indexedDocs = tokens.SelectMany(t =>
-            {
-                var term = t.Term;
-                // Find indexed pages
-                if (!_docIndexer.TryGetIndexedDocs(term, out List<TermInDoc> docs))
-                    return new List<TermDocScore>();
-
-                return docs.Select(p =>
-                {
-                    if (!_docIndexer.TryGetDocInfo(p.DocId, out DocInfo pi))
-                        return (TermDocScore)null;
-
-                    // Use TF-IDF to calculate the score
-                    return new TermDocScore(term, pi,
-                        Tf_Idf.Calculate(
-                            p.TermsInDoc, 
-                            pi.TokenCount, 
-                            _docIndexer.GetTotalDocCount(),
-                            docs.Count));
-                }).Where(x => x != null).ToList();
-            }).ToList();
+            // Find indexed docs
+            var indexedDocsWithScore = tokens.SelectMany(CalculateTokenScore).ToList();
 
             // Sum up all token scores by page
-            var ret = indexedDocs.GroupBy(ip => ip.DocInfo.DocId)
+            var ret = indexedDocsWithScore.GroupBy(ip => ip.DocInfo.DocId)
                 .Select(x =>
                 {
                     var doc = x.First();
-                    return new TermDocScore(doc.Term, doc.DocInfo, x.Sum(d => d.Score));
+                    var item = new SearchResultItem
+                    {
+                        DocId = doc.DocInfo.DocId,
+                        Title = doc.DocInfo.Title,
+                        Url = doc.DocInfo.Url,
+                        Score = Math.Round(x.Sum(d => d.Score), 4),
+                        Explain = x.Select(tds => new ItemExplain
+                        {
+                            Term = tds.Term,
+                            ScoreInDoc = Math.Round(tds.Score, 4)
+                        }).ToList()
+                    };
+
+                    return item;
                 }).ToList();
 
             ret.Sort(new ScoreComparer());
@@ -55,12 +51,29 @@ namespace MySearchEngine.Server.Core
             return ret.Skip(from).Take(size).ToList();
         }
 
-        private class ScoreComparer : Comparer<TermDocScore>
+        private List<TermDocScore> CalculateTokenScore(Token token)
         {
-            public override int Compare(TermDocScore x, TermDocScore y)
+            var term = token.Term;
+            // Find indexed pages
+            if (!_docIndexer.TryGetIndexedDocs(term, out List<TermInDoc> docs))
+                return new List<TermDocScore>();
+
+            // Score term in each doc
+            var tds = docs.Select(p =>
             {
-                return y.Score.CompareTo(x.Score);
-            }
+                if (!_docIndexer.TryGetDocInfo(p.DocId, out DocInfo di))
+                    return (TermDocScore) null;
+
+                // Use TF-IDF to calculate the score
+                return new TermDocScore(term, di,
+                    Tf_Idf.Calculate(
+                        p.Count,
+                        di.TokenCount,
+                        _docIndexer.GetTotalDocCount(),
+                        docs.Count));
+            }).Where(x => x != null).ToList();
+
+            return tds;
         }
     }
 }

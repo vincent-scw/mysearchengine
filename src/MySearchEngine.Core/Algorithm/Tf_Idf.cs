@@ -4,10 +4,10 @@ namespace MySearchEngine.Core.Algorithm
 {
     public class Tf_Idf
     {
-        public static double Calculate(int termCountInPage, int totalTermsInPage, int totalPages, int termInPages)
+        public static double Calculate(int termCountInDoc, int totalTermsInDoc, int totalDocs, int numberOfDocsWithTerm)
         {
-            var tf = (double)termCountInPage / totalTermsInPage;
-            var idf = Math.Log10((double)totalPages / termInPages);
+            var tf = (double)termCountInDoc / totalTermsInDoc;
+            var idf = Math.Log((double)totalDocs / numberOfDocsWithTerm);
 
             return tf * idf;
         }

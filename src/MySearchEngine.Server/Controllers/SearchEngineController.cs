@@ -26,13 +26,7 @@ namespace MySearchEngine.Server.Controllers
         {
             _logger.LogInformation($"Search for \"{searchText}\"");
             var searchResult = _searchEngine.Search(searchText, size, from);
-            return Ok(searchResult.Select(p => new
-            {
-                p.DocInfo.DocId,
-                p.DocInfo.Title,
-                p.DocInfo.Url,
-                Score = Math.Round(p.Score, 4)
-            }));
+            return Ok(searchResult);
         }
     }
 }
