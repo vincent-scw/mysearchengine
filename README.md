@@ -45,10 +45,10 @@ Note：Client can be anything calling Server API
    Crawler's responsibility is downloading pages, and grab all links from the page. Then choose those valuable links to crawl again. Repeat these steps. The key point for this stage is ***How to determine whether a link has been visited or not?***   
    It's quite obivious that when time goes by, the visited links grows rapidly. We'll run into issues if use Arrary，Dictionary or HashMap to store links. They will have either performance issue or memory issue. So ***Bloom Filter*** is recommended for this case.  
 
-   > ***Bloom Filter***是一种非常高效、资源利用率高的数据结构。
-   > 布隆过滤器维护一个定长的boolean数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的boolean值置为1。  
-   > 这样可对新的源文本同样取Hash值，如果过滤器中的相应位置已经全为1，则此文本已经被访问过了。只要有一个位置为0，则此源文本未被访问。   
-   > 布隆过滤器的问题是依然会有哈希碰撞，导致新的源文本有几率会被误认为已被访问。不过这种情况在网络爬虫中是可被接受的，因为结果无非是少爬取几个网页罢了。 
+   > ***Bloom Filter***
+   > Bloom Filter is a space-efficient probabilistic data structure. It maintains a bit array of m bits, all set to 0. Its principle is to obtain the hash values of the source text throught several different hash functions. After taking the modulo of each hash value, we set the bit array at the corresponding position to 1.  
+   > In this way, when a new source text comes, a query returns either "possibly in set" (by all 1s) or "definitely not in set" (by at least one zero).   
+   > The problem for Bloom Filter is hash collision. It makes "possibly in set", which means some source text will be missing visited. But it is exceptable in web crawling. 
    >
    > ![bloomfilter](res/bloomfilter.png)
    >
@@ -56,11 +56,11 @@ Note：Client can be anything calling Server API
 
 1. Index Creating Stage
   
-   在索引创建的阶段，其实质就是对文本进行分析的过程。文本分析的结果就是一组Token，也就是文本中的单词或者词组。  
-   这里参考了Elasticsearch的Analyzer的设计。分析分为三个过程：Character filter(s), Tokenizer, Token filter(s)。其中Filter(s)可以有多个，按顺序执行。  
-   - Character filter(s)：可以对原始文本所包含的字符进行添加、删除或者更改。
-   - Tokenizer：把经过Character filter(s)之后的内容分解为Token。因为这里爬取的都是英文网站，所以使用最简单的基于whitespace的分解。
-   - Token filter(s)：对已经分解好的Token进行进一步的处理。比如转化为小写，合并相同词根，添加同义词等等。 
+   In the stage of index creation, its essence is the process of analyzing the text. The outcome of text analysis is a set of tokens, which are words or phrases in the text.  
+   Reference to the design of Elasticsearch's analyzer, the analysis can be divided into three processes: Character filter(s), Tokenizer, Token filter(s)。Among them, Filter(s) can be multiple, which are executed in order.  
+   - Character filter(s)：Used to add, delete or change the characters contained in the original text.
+   - Tokenizer：Used to decompose the content after Character filter(s) into Tokens. Because I've crawled all web pages in English, so I'll use whitespace to separate each word.
+   - Token filter(s)：Used to further process decomposed Tokens. For example, convert to lowercase, merge the same stems, add synonyms, and so on. 
    
    
    > The process of ***Analyzing***  
@@ -84,21 +84,22 @@ Note：Client can be anything calling Server API
    
 1. Index Storing Stage
 
-   - 将每一个Term以 `{term}|{termId}` 的格式保存为term.bin文件
-   - 将每一个Doc以 `{docId}|{url}|{allTermsInDoc}` 的格式保存为doc.bin文件
-   - 将倒排索引以 `{termId}|{docId}:{termCountInDoc},...` 的格式保存为index.bin文件（注：用逗号分隔每一个doc）
+   - Store each Term as format `{term}|{termId}` into `term.bin` file.
+   - Store each Document as format `{docId}|{title}|{url}|{allTermsInDoc}` into `doc.bin` file. (Note: {title} is only for reference. It will not be indexed.) 
+   - Store each inverted index as format `{termId}|{docId}:{termCountInDoc},...` into `index.bin` file. (Note: Split each document by comma.)
 
 1. Searching Stage
 
-   与索引阶段相同，将输入的SearchText用TextAnalyzer分析出一组Token。然后通过倒排索引找到对应的Doc。最后利用TF-IDF进行算分。
+   Same as the indexing, the input SearchText is analyzed with TextAnalyzer to get a set of Tokens. Then find the corresponding Document through the inverted index. Finally, use TF-IDF to calculate the score.
    
    > ***TF-IDF***（Term Frequency - Inverse Document Frequency）  
-   > Term Frequency: 一般认为同一个Term在某文档中出现的次数越多，则这个Term在这篇文档中的重要性越高。  
-   > Inverse Document Frequency：相反的，同一个Term在不同文档中出现的次数越多，则这个Term就更通用。它相对的重要性就越低。
+   > Term Frequency: It is generally believed that the more the same term appears in a document, the higher the importance of this term in this document.  
+   > Inverse Document Frequency：On the contrary, the more the same term appears in different documents, the more general the term will be. Its relative importance is lower.
    >
    > Ref. to [tfidf](http://tfidf.com/)
    
 ## Summary
+Searching is a very interesting process. It contains various ideas, algorithms and logics. Surprisingly, the storage capacity of the index results is very small (under the premise of uncompressed, indexing 10,000+ web pages only takes up 15MB of capacity), and there is no need to keep the original documents.
 
 ## Features
 - [x] Web Crawler

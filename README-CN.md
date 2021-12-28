@@ -45,8 +45,8 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    很显然随着时间的推移，已爬取链接的数量剧增。仅使用Arrary，Dictionary或者HashMap都不太实际。它们要么有性能问题，要么占用太多内存资源。这边推荐使用***布隆过滤器***来实现。  
 
    > ***布隆过滤器***
-   > 布隆过滤器是一种非常高效、资源利用率高的数据结构。它维护一个定长的boolean数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的boolean值置为1。  
-   > 这样可对新的源文本同样取Hash值，如果过滤器中的相应位置已经全为1，则此文本已经被访问过了。只要有一个位置为0，则此源文本未被访问。   
+   > 布隆过滤器是一种非常高效、资源利用率高的数据结构。它维护一个定长的bit数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的bit值置为1。  
+   > 通过这样的方式，对新的源文本，一次查询就可得知此源文本“可能在列表中”（所有bit位为1）或者“绝对不在列表中”（至少一个bit位为0）。   
    > 布隆过滤器的问题是依然会有哈希碰撞，导致新的源文本有几率会被误认为已被访问。不过这种情况在网络爬虫中是可被接受的，因为结果无非是少爬取几个网页罢了。 
    >
    > ![bloomfilter](res/bloomfilter.png)
@@ -89,9 +89,9 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    
 1. 索引数据保存阶段
 
-   - 将每一个Term以 `{term}|{termId}` 的格式保存为term.bin文件
-   - 将每一个Doc以 `{docId}|{url}|{allTermsInDoc}` 的格式保存为doc.bin文件
-   - 将倒排索引以 `{termId}|{docId}:{termCountInDoc},...` 的格式保存为index.bin文件（注：用逗号分隔每一个doc）
+   - 将每一个Term以 `{term}|{termId}` 的格式保存为`term.bin`文件。
+   - 将每一个Doc以 `{docId}|{title}|{url}|{allTermsInDoc}` 的格式保存为`doc.bin`文件。（注：{title}仅用作查看，它不会被加入索引）
+   - 将倒排索引以 `{termId}|{docId}:{termCountInDoc},...` 的格式保存为`index.bin`文件（注：用逗号分隔每一个doc）。
 
 1. 搜索阶段
 
