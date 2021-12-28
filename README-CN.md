@@ -8,9 +8,11 @@ MySearchEngine 是一个学习与实践文本搜索相关知识的个人项目�
 尽量不使用第三方工具，自己实现一个简单的搜索引擎。其数据来源于网络。我们从爬取某网页开始，然后分析内容，创建索引。最后能够完成搜索，并按照得分顺序返回结果。
 
 ## 如何启动
-1. 启动[QueueService](start_queue.bat).
-1. 启动[WebCrawler](start_crawler.bat).
-1. 启动[Server](start_sever.bat).
+1. 启动[QueueService](start_queue.bat)。
+1. 启动[WebCrawler](start_crawler.bat)。输入任意一个URL开始爬取。注意这边只会爬取拥有相同域名的链接。按任意键退出。
+1. 启动[Server](start_sever.bat)。后台线程会开始文本分析。可以通过Swagger网页进行搜索。
+
+注：如果想跳过爬取阶段，也可以复制[res_bak](res_bak)目录下的文件到[res](res)文件夹中。我已经预先爬取了10,000+个网页供搜索。即便如此，QueueService必须要运行。
 
 ## 项目结构
 MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
@@ -42,8 +44,8 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    爬虫的主要工作就是下载网页，读取网页内的所有超链接。然后选择我们认为有价值的链接再爬取。如此循环往复。其中值得一提的点是***如何判断网页链接是否已经爬取过？***。  
    很显然随着时间的推移，已爬取链接的数量剧增。仅使用Arrary，Dictionary或者HashMap都不太实际。它们要么有性能问题，要么占用太多内存资源。这边推荐使用***布隆过滤器***来实现。  
 
-   > ***布隆过滤器***是一种非常高效、资源利用率高的数据结构。
-   > 布隆过滤器维护一个定长的boolean数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的boolean值置为1。  
+   > ***布隆过滤器***
+   > 布隆过滤器是一种非常高效、资源利用率高的数据结构。它维护一个定长的boolean数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的boolean值置为1。  
    > 这样可对新的源文本同样取Hash值，如果过滤器中的相应位置已经全为1，则此文本已经被访问过了。只要有一个位置为0，则此源文本未被访问。   
    > 布隆过滤器的问题是依然会有哈希碰撞，导致新的源文本有几率会被误认为已被访问。不过这种情况在网络爬虫中是可被接受的，因为结果无非是少爬取几个网页罢了。 
    >
@@ -72,12 +74,18 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    > |加工|描述|输出|
    > |---|---|---|
    > |[HtmlElementFilter](src/MySearchEngine.Core/Analyzer/CharacterFilters/HtmlElementFilter.cs)|删除HTML元素。 |The QUICK brown fox jumps. |
-   > |[SimpleTokenizer](src/MySearchEngine.Core/Analyzer/Tokenizers/SimpleTokenizer.cs)|以whiteshpace拆分文本为一组Token。只保留字母和数字。|["The", "QUICK", "brown", "fox", "jumps"]|
+   > |[SimpleTokenizer](src/MySearchEngine.Core/Analyzer/Tokenizers/SimpleTokenizer.cs)|以whitespace拆分文本为一组Token。只保留字母和数字。|["The", "QUICK", "brown", "fox", "jumps"]|
    > |[LowercaseTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/LowercaseTokenFilter.cs)|把Token更新为小写字符。|["the", "quick", "brown", "fox", "jumps"]|
    > |[StemmerTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StemmerTokenFilter.cs)|把Token更新为它的根（ 使用[PorterStemmer](https://iq.opengenus.org/porter-stemmer/)）。|["the", "quick", "brown", "fox", "jump"]|
    > |[StopWordTokenFilter](src/MySearchEngine.Core/Analyzer/TokenFilters/StopWordTokenFilter.cs)|删除停止词。|["quick", "brown", "fox", "jump"]|
    >
    > 详情请参考[Analyzer Anatomy](https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer-anatomy.html)
+   
+   > 对短语和其他语言的支持  
+   > 譬如像``Renmin University of China``这样的短语，或者中文``中国人民大学``这样无法通过whitespace来做拆分的情况，该如何支持搜索呢？  
+   > 首先我们需要准备一个短语列表。值得注意的是，除了那些常用的短语之外，根据不同的领域，列表也是会不同的。
+   >
+   > 注：未在程序中支持
    
 1. 索引数据保存阶段
 
@@ -89,6 +97,10 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
 
    与索引阶段相同，将输入的SearchText用TextAnalyzer分析出一组Token。然后通过倒排索引找到对应的Doc。最后利用TF-IDF进行算分。
    
+   > ***Damerau-Levenshtein Distance***
+   >
+   > 详情请参考[wiki](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)
+   
    > ***TF-IDF***（Term Frequency - Inverse Document Frequency）  
    > Term Frequency: 一般认为同一个Term在某文档中出现的次数越多，则这个Term在这篇文档中的重要性越高。  
    > Inverse Document Frequency：相反的，同一个Term在不同文档中出现的次数越多，则这个Term就更通用。它相对的重要性就越低。
@@ -96,6 +108,7 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    > 详情请参考[tfidf](http://tfidf.com/)
 
 ## 总结
+搜索是一个非常有意思的过程。其中包含着各种各样的思想，算法和逻辑。出乎意料的是，索引的结果保存下来容量非常小（在未压缩的前提下，索引10,000+网页仅占用15MB的容量），而且没有必要留存原始文档。
 
 ## 附：实现列表
 - [x] Web Crawler
@@ -115,5 +128,6 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
 	- [x] Doc
 	- [x] Inverted Index
 - [ ] Search
+    - [ ] Damerau-Levenshtein Distance
 	- [x] TF-IDF
 	- [ ] BM25

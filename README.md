@@ -10,8 +10,10 @@ The source data comes from internet. We will start with web crawling, text analy
 
 ## How to start
 1. Run [QueueService](start_queue.bat).
-1. Run [WebCrawler](start_crawler.bat).
-1. Run [Server](start_sever.bat).
+1. Run [WebCrawler](start_crawler.bat). Input any URL to start crawling. Note: links only in the same domain will be crawled.
+1. Run [Server](start_sever.bat). The background thread will start text analyzing automatically. You can start search via Swagger page simultaneously.  
+
+Note: If you want to skip crawling stage, you can copy files in [res_bak](res_bak) into [res](res). I've pre-crawled more than 10,000+ pages.
 
 ## Project Structure
 MySearchEngine consits of three runable consoles and one core library.
@@ -116,5 +118,6 @@ Note：Client can be anything calling Server API
 	- [x] Doc
 	- [x] Inverted Index
 - [ ] Search
+    - [ ] Damerau-Levenshtein Distance
 	- [x] TF-IDF
 	- [ ] BM25
