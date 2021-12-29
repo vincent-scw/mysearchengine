@@ -47,7 +47,7 @@ Note：Client can be anything calling Server API
 
    > ***Bloom Filter***
    >
-   > Bloom Filter is a space-efficient probabilistic data structure. It maintains a bit array of m bits, all set to 0. Its principle is to obtain the hash values of the source text throught several different hash functions. After taking the modulo of each hash value, we set the bit array at the corresponding position to 1.  
+   > [Bloom Filter](src/MySearchEngine.Core/Algorithm/BloomFilter.cs) is a space-efficient probabilistic data structure. It maintains a bit array of m bits, all set to 0. Its principle is to obtain the hash values of the source text throught several different hash functions. After taking the modulo of each hash value, we set the bit array at the corresponding position to 1.  
    > In this way, when a new source text comes, a query returns either "possibly in set" (by all 1s) or "definitely not in set" (by at least one zero).   
    > The problem for Bloom Filter is hash collision. It makes "possibly in set", which means some source text will be missing visited. But it is acceptable in web crawling. 
    >
@@ -61,7 +61,7 @@ Note：Client can be anything calling Server API
    Reference to the design of Elasticsearch's analyzer, the analysis can be divided into three processes: Character filter(s), Tokenizer, Token filter(s)。Among them, Filter(s) can be multiple, which are executed in order.  
    - Character filter(s)：Used to add, delete or change the characters contained in the original text.
    - Tokenizer：Used to decompose the content after Character filter(s) into Tokens. Because I've crawled all web pages in English, so I'll use whitespace to separate each word.
-   - Token filter(s)：Used to further process decomposed Tokens. For example, convert to lowercase, merge the same stems, add synonyms, and so on. 
+   - Token filter(s)：Used to further process decomposed Tokens. For example, convert to lowercase, merge the same stems, add synonyms, and so on.   
    
    
    > The process of ***Analyzing***  
@@ -85,7 +85,7 @@ Note：Client can be anything calling Server API
    
    Above is the basic process of analyzing. In real circumstance, it will be much more complicated. More issues (such as support for phrase or other languages, auto-complete function, etc...) must be concerned.  
    
-   > ***Support for phrase or ther languages***  
+   > ***Support for phrase or other languages***  
    >
    > In case of phrase ``Renmin University of China``, or Chinese like ``中国人民大学``, these cannot be separated by whitespace. How to support them?  
    > At first we need to prepare a phrase list. Please note, except those common phrases, according to different domain, the list will also be different.
@@ -135,6 +135,7 @@ Note：Client can be anything calling Server API
    > Inverse Document Frequency：On the contrary, the more the same term appears in different documents, the more general the term will be. Its relative importance is lower.
    > ```
    > IDF(t) = log(Total number of documents / Number of documents with term t in it)
+   > // Use base 10 log here
    > ```
    >
    > Ref. to [tfidf](http://tfidf.com/)
