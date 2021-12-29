@@ -45,13 +45,13 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    很显然随着时间的推移，已爬取链接的数量剧增。仅使用Arrary，Dictionary或者HashMap都不太实际。它们要么有性能问题，要么占用太多内存资源。这边推荐使用***布隆过滤器***来实现。  
 
    > ***布隆过滤器***
-   > [布隆过滤器](src/MySearchEngine.Core/Algorithm/BloomFilter.cs)是一种非常高效、资源利用率高的数据结构。它维护一个定长的bit数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的bit值置为1。  
+   > [布隆过滤器](https://en.wikipedia.org/wiki/Bloom_filter)是一种非常高效、资源利用率高的数据结构。它维护一个定长的bit数组。它的原理是通过若干个不同的Hash函数来对源文本取Hash值。把Hash值取模之后，在过滤器中的相应位置的bit值置为1。  
    > 通过这样的方式，对新的源文本，一次查询就可得知此源文本“可能在列表中”（所有bit位为1）或者“绝对不在列表中”（至少一个bit位为0）。   
    > 布隆过滤器的问题是依然会有哈希碰撞，导致新的源文本有几率会被误认为已被访问。不过这种情况在网络爬虫中是可被接受的，因为结果无非是少爬取几个网页罢了。 
    >
    > ![bloomfilter](res/bloomfilter.png)
    >
-   > 详情请参考[wiki](https://en.wikipedia.org/wiki/Bloom_filter)
+   > 代码实现[BloomFilter](src/MySearchEngine.Core/Algorithm/BloomFilter.cs)
 
 1. 索引创建阶段
   
@@ -115,14 +115,14 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    
    > ***Damerau-Levenshtein Distance***
    >
-   > [Damerau-Levenshtein Distance](src/MySearchEngine.Core/Algorithm/DamerauLevenshteinDistance.cs) 用于测量两个字符串之间的编辑距离。
+   > [Damerau-Levenshtein Distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) 用于测量两个字符串之间的编辑距离。
    > 它对于处理拼写错误非常有帮助。着意味着如果我搜索“apole”， 它也可以返回“apple”的结果。“apole”和“apple”之间的编辑距离是1。
    >
-   > 详情请参考[wiki](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)
+   > 代码实现[DamerauLevenshteinDistance](src/MySearchEngine.Core/Algorithm/DamerauLevenshteinDistance.cs)
    
    > ***TF-IDF***（Term Frequency - Inverse Document Frequency）
    >
-   > [Term Frequency - Inverse Document Frequency](src/MySearchEngine.Core/Algorithm/TfIdf.cs) 是一种用于评估一个词相对于文档重要性的算法。它由两部分组成。
+   > [Term Frequency - Inverse Document Frequency](http://tfidf.com/) 是一种用于评估一个词相对于文档重要性的算法。它由两部分组成。
    >
    > Term Frequency: 一般认为同一个Term在某文档中出现的次数越多，则这个Term在这篇文档中的重要性越高。  
    > ```
@@ -135,7 +135,7 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    > // 使用以10为底的对数
    > ```
    >
-   > 详情请参考[tfidf](http://tfidf.com/)
+   > 代码实现[TfIdf](src/MySearchEngine.Core/Algorithm/TfIdf.cs)
 
 ## 总结
 搜索是一个非常有意思的过程。其中包含着各种各样的思想，算法和逻辑。出乎意料的是，索引的结果保存下来容量非常小（在未压缩的前提下，索引10,000+网页仅占用15MB的容量），而且没有必要留存原始文档。

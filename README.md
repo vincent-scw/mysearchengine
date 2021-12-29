@@ -47,13 +47,13 @@ Note：Client can be anything calling Server API
 
    > ***Bloom Filter***
    >
-   > [Bloom Filter](src/MySearchEngine.Core/Algorithm/BloomFilter.cs) is a space-efficient probabilistic data structure. It maintains a bit array of m bits, all set to 0. Its principle is to obtain the hash values of the source text throught several different hash functions. After taking the modulo of each hash value, we set the bit array at the corresponding position to 1.  
+   > [Bloom Filter](https://en.wikipedia.org/wiki/Bloom_filter) is a space-efficient probabilistic data structure. It maintains a bit array of m bits, all set to 0. Its principle is to obtain the hash values of the source text throught several different hash functions. After taking the modulo of each hash value, we set the bit array at the corresponding position to 1.  
    > In this way, when a new source text comes, a query returns either "possibly in set" (by all 1s) or "definitely not in set" (by at least one zero).   
    > The problem for Bloom Filter is hash collision. It makes "possibly in set", which means some source text will be missing visited. But it is acceptable in web crawling. 
    >
    > ![bloomfilter](res/bloomfilter.png)
    >
-   > Ref. to [wiki](https://en.wikipedia.org/wiki/Bloom_filter)
+   > Implemented at [BloomFilter](src/MySearchEngine.Core/Algorithm/BloomFilter.cs)
 
 1. Index Creating Stage
   
@@ -87,7 +87,7 @@ Note：Client can be anything calling Server API
    
    > ***Support for phrase or other languages***  
    >
-   > In case of phrase ``Renmin University of China``, or Chinese like ``中国人民大学``, these cannot be separated by whitespace. How to support them?  
+   > In case of phrase ``Renmin University of China``, or Chinese like ``中国人民大学``, these phrases cannot be splitted by whitespace. How to support them?  
    > At first we need to prepare a phrase list. Please note, except those common phrases, according to different domain, the list will also be different.
    >
    > Note: Not Implemented
@@ -117,14 +117,14 @@ Note：Client can be anything calling Server API
    
    > ***Damerau-Levenshtein Distance***
    >
-   > [Damerau-Levenshtein Distance](src/MySearchEngine.Core/Algorithm/DamerauLevenshteinDistance.cs) is a string metric for measuring the edit distance between two sequences.
+   > [Damerau-Levenshtein Distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) is a string metric for measuring the edit distance between two sequences.
    > It is very helpful to handle misspelling. Which means if I search for "apole", it can return the result of "apple" as well. The edit distance between "apole" and "apple" is 1.
    >
-   > Ref. to [wiki](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)
+   > Implemented at [DamerauLevenshteinDistance](src/MySearchEngine.Core/Algorithm/DamerauLevenshteinDistance.cs)
    
    > ***TF-IDF***（Term Frequency - Inverse Document Frequency） 
    >
-   > [Term Frequency - Inverse Document Frequency](src/MySearchEngine.Core/Algorithm/TfIdf.cs) is an algorithm to evaluate how important a word is to a document in a collection or corpus.
+   > [Term Frequency - Inverse Document Frequency](http://tfidf.com/) is an algorithm to evaluate how important a word is to a document in a collection or corpus.
    > It consits of two parts.
    > 
    > Term Frequency: It is generally believed that the more the same term appears in a document, the higher the importance of this term in this document.  
@@ -138,7 +138,7 @@ Note：Client can be anything calling Server API
    > // Use base 10 log here
    > ```
    >
-   > Ref. to [tfidf](http://tfidf.com/)
+   > Implemented at [TfIdf](src/MySearchEngine.Core/Algorithm/TfIdf.cs)
    
 ## Summary
 Searching is a very interesting process. It contains various ideas, algorithms and logics. Surprisingly, the storage capacity of the index results is very small (under the premise of uncompressed, indexing 10,000+ web pages only takes up 15MB of capacity), and there is no need to keep the original documents.
