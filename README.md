@@ -46,9 +46,10 @@ Note：Client can be anything calling Server API
    It's quite obivious that when time goes by, the visited links grows rapidly. We'll run into issues if use Arrary，Dictionary or HashMap to store links. They will have either performance issue or memory issue. So ***Bloom Filter*** is recommended for this case.  
 
    > ***Bloom Filter***
+   >
    > Bloom Filter is a space-efficient probabilistic data structure. It maintains a bit array of m bits, all set to 0. Its principle is to obtain the hash values of the source text throught several different hash functions. After taking the modulo of each hash value, we set the bit array at the corresponding position to 1.  
    > In this way, when a new source text comes, a query returns either "possibly in set" (by all 1s) or "definitely not in set" (by at least one zero).   
-   > The problem for Bloom Filter is hash collision. It makes "possibly in set", which means some source text will be missing visited. But it is exceptable in web crawling. 
+   > The problem for Bloom Filter is hash collision. It makes "possibly in set", which means some source text will be missing visited. But it is acceptable in web crawling. 
    >
    > ![bloomfilter](res/bloomfilter.png)
    >
@@ -82,6 +83,28 @@ Note：Client can be anything calling Server API
    >
    > Ref. to [Analyzer Anatomy](https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer-anatomy.html)
    
+   Above is the basic process of analyzing. In real circumstance, it will be much more complicated. More issues (such as support for phrase or other languages, auto-complete function, etc...) must be concerned.  
+   
+   > ***Support for phrase or ther languages***  
+   >
+   > In case of phrase ``Renmin University of China``, or Chinese like ``中国人民大学``, these cannot be separated by whitespace. How to support them?  
+   > At first we need to prepare a phrase list. Please note, except those common phrases, according to different domain, the list will also be different.
+   >
+   > Note: Not Implemented
+   
+   
+   > ***Auto-Complete***
+   >
+   > Auto-Complete refers to the function of automatically completing the content according to your input. It's just like the search textbox in Google.
+   >
+   > To achieve this, we only need to do some special processing in Tokenizer. Simply put, a Token need to be split into several Tokens according to each character. For example:  
+   > ```csharp
+   > ["apple"] => ["a", "ap", "app", "appl", "apple"]
+   > ```
+   > Obviously, this processing will take up more space. Generally, it is not very helpful for searching the entire webpage, so it is not implemented in the program.
+   > 
+   > Note: Not Implemented
+   
 1. Index Storing Stage
 
    - Store each Term as format `{term}|{termId}` into `term.bin` file.
@@ -92,9 +115,27 @@ Note：Client can be anything calling Server API
 
    Same as the indexing, the input SearchText is analyzed with TextAnalyzer to get a set of Tokens. Then find the corresponding Document through the inverted index. Finally, use TF-IDF to calculate the score.
    
-   > ***TF-IDF***（Term Frequency - Inverse Document Frequency）  
+   > ***Damerau-Levenshtein Distance***
+   >
+   > [Damerau-Levenshtein Distance](src/MySearchEngine.Core/Algorithm/DamerauLevenshteinDistance.cs) is a string metric for measuring the edit distance between two sequences.
+   > It is very helpful to handle misspelling. Which means if I search for "apole", it can return the result of "apple" as well. The edit distance between "apole" and "apple" is 1.
+   >
+   > Ref. to [wiki](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)
+   
+   > ***TF-IDF***（Term Frequency - Inverse Document Frequency） 
+   >
+   > [Term Frequency - Inverse Document Frequency](src/MySearchEngine.Core/Algorithm/TfIdf.cs) is an algorithm to evaluate how important a word is to a document in a collection or corpus.
+   > It consits of two parts.
+   > 
    > Term Frequency: It is generally believed that the more the same term appears in a document, the higher the importance of this term in this document.  
+   > ```
+   > TF(t) = (Number of times term t appears in a document) / (Total number of terms in the document)
+   > ```
+   >
    > Inverse Document Frequency：On the contrary, the more the same term appears in different documents, the more general the term will be. Its relative importance is lower.
+   > ```
+   > IDF(t) = log(Total number of documents / Number of documents with term t in it)
+   > ```
    >
    > Ref. to [tfidf](http://tfidf.com/)
    

@@ -81,10 +81,26 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    >
    > 详情请参考[Analyzer Anatomy](https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer-anatomy.html)
    
-   > 对短语和其他语言的支持  
+   以上是基本的文本分析过程。显然它们只是对文本的简单处理。在正式场景中，我们一定会遇到更多问题。比如对短语和其他语言的支持，Auto-Complete等等。
+   
+   > ***对短语和其他语言的支持***  
+   >
    > 譬如像``Renmin University of China``这样的短语，或者中文``中国人民大学``这样无法通过whitespace来做拆分的情况，该如何支持搜索呢？  
    > 首先我们需要准备一个短语列表。值得注意的是，除了那些常用的短语之外，根据不同的领域，列表也是会不同的。
    >
+   > 注：未在程序中支持
+   
+   
+   > ***Auto-Complete***
+   >
+   > Auto-Complete即是指根据你的输入，自动补完内容的功能。就像Google搜索栏中的那样。
+   >
+   > 想要达到这样的效果，只需要在Tokenzier里做一些特殊处理。简单的说就是把一个Token根据每个字符拆分成若干个Token。比如：
+   > ```csharp
+   > ["apple"] => ["a", "ap", "app", "appl", "apple"]
+   > ```
+   > 显然，这样处理会更占用空间。一般对于整个网页的搜索来说帮助不大，所以没有在程序中支持。
+   > 
    > 注：未在程序中支持
    
 1. 索引数据保存阶段
@@ -99,11 +115,24 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    
    > ***Damerau-Levenshtein Distance***
    >
+   > [Damerau-Levenshtein Distance](src/MySearchEngine.Core/Algorithm/DamerauLevenshteinDistance.cs) 用于测量两个字符串之间的编辑距离。
+   > 它对于处理拼写错误非常有帮助。着意味着如果我搜索“apole”， 它也可以返回“apple”的结果。“apole”和“apple”之间的编辑距离是1。
+   >
    > 详情请参考[wiki](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)
    
-   > ***TF-IDF***（Term Frequency - Inverse Document Frequency）  
+   > ***TF-IDF***（Term Frequency - Inverse Document Frequency）
+   >
+   > [Term Frequency - Inverse Document Frequency](src/MySearchEngine.Core/Algorithm/TfIdf.cs) 是一种用于评估一个词相对于文档重要性的算法。它由两部分组成。
+   >
    > Term Frequency: 一般认为同一个Term在某文档中出现的次数越多，则这个Term在这篇文档中的重要性越高。  
+   > ```
+   > TF(t) = (词项(t)在文档中出现的次数) / (文档中词项的总数)
+   > ```
+   >
    > Inverse Document Frequency：相反的，同一个Term在不同文档中出现的次数越多，则这个Term就更通用。它相对的重要性就越低。
+   > ```
+   > IDF(t) = log(文档总数 / 出现过词项(t)的文档数)
+   > ```
    >
    > 详情请参考[tfidf](http://tfidf.com/)
 
