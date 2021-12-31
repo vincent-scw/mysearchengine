@@ -13,6 +13,8 @@ The source data comes from internet. We will start with web crawling, text analy
 1. Run [WebCrawler](start_crawler.bat). Input any URL to start crawling. Note: links only in the same domain will be crawled.
 1. Run [Server](start_sever.bat). The background thread will start text analyzing automatically. You can start search via Swagger page simultaneously.  
 
+![search](res/do_search.gif)
+
 Note: If you want to skip crawling stage, you can copy files in [res_bak](res_bak) into [res](res). I've pre-crawled more than 10,000+ pages.
 
 ## Project Structure

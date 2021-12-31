@@ -12,6 +12,8 @@ MySearchEngine 是一个学习与实践文本搜索相关知识的个人项目�
 1. 启动[WebCrawler](start_crawler.bat)。输入任意一个URL开始爬取。注意这边只会爬取拥有相同域名的链接。按任意键退出。
 1. 启动[Server](start_sever.bat)。后台线程会开始文本分析。可以通过Swagger网页进行搜索。
 
+![search](res/do_search.gif)
+
 注：如果想跳过爬取阶段，也可以复制[res_bak](res_bak)目录下的文件到[res](res)文件夹中。我已经预先爬取了10,000+个网页供搜索。即便如此，QueueService必须要运行。
 
 ## 项目结构
