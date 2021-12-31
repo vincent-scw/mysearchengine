@@ -83,13 +83,26 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    
    以上是基本的文本分析过程。显然它们只是对文本的简单处理。在正式场景中，我们一定会遇到更多问题。比如对短语和其他语言的支持，Auto-Complete等等。
    
-   > ***对短语和其他语言的支持***  
-   >
-   > 譬如像``Renmin University of China``这样的短语，或者中文``中国人民大学``这样无法通过whitespace来做拆分的情况，该如何支持搜索呢？  
-   > 首先我们需要准备一个短语列表。值得注意的是，除了那些常用的短语之外，根据不同的领域，列表也是会不同的。
-   >
-   > 注：未在程序中支持
+   - 对短语和其他语言的支持  
    
+   譬如像``Renmin University of China``这样的短语，或者中文``中国人民大学``这样无法通过whitespace来做拆分的情况，该如何支持搜索呢？  
+   首先我们需要准备一个短语列表。值得注意的是，除了那些常用的短语之外，根据不同的领域，列表也是会不同的。有了短语列表，我们就可以创建一颗字典树。  
+   
+   > ***Trie 字典树***
+   >
+   > 如我们所见，像``中国人民大学``这样的短语中其实包含着多个短语，如下图所示。
+   > ![chinese_phrase](res/chinese_phrase.png)  
+   >
+   > 划线部分的短语都应该出现在我们的列表中。基于此，我们来创建Trie字典树。它的基本原理是除了根节点之外，把每一个短语都像下图一样加入到树中。注意红色的节点都代表一个短语的结束。
+   > ![trie](res/trie.png)  
+   >
+   > 代码实现[Trie](src/MySearchEngine.Core/Algorithm/DocumentTrie.cs)
+   
+   有了这棵树之后，接下来我们只要拿候选语句在树上爬一遍，就知道其中有多少个短语了。这些短语就将记作Token。我们希望爬完``中国人民大学``之后会返回5个短语。这里要介绍一下Aho-Corasick（AC自动机）。
+   
+   > ***Aho-Corasick（AC自动机）***
+   >
+   > 代码实现[Aho-Corasick](src/MySearchEngine.Core/Algorithm/AcPatternMatcher.cs)
    
    > ***Auto-Complete***
    >
