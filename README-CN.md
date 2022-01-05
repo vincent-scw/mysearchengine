@@ -118,6 +118,12 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    > 
    > 注：未在程序中支持
    
+   如此这般，我们手上就有了一组词项，还有一组网页内容。接下来就是创建最重要的***倒排索引***了。
+   
+   > ***Inverted Index***
+   >
+   >
+   
 1. 索引数据保存阶段
 
    - 将每一个Term以 `{term}|{termId}` 的格式保存为`term.bin`文件。
@@ -150,7 +156,7 @@ MySearchEngine 由三个可运行客户端和一个核心Library项目组成。
    > // 使用以10为底的对数
    > ```
    >
-   > 代码实现[TfIdf](src/MySearchEngine.Core/Algorithm/TfIdf.cs)
+   > 代码实现[TfIdf](src/MySearchEngine.Core/Algorithm/Tf_Idf.cs)
 
 ## 总结
 搜索是一个非常有意思的过程。其中包含着各种各样的思想，算法和逻辑。出乎意料的是，索引的结果保存下来容量非常小（在未压缩的前提下，索引10,000+网页仅占用15MB的容量），而且没有必要留存原始文档。

@@ -52,5 +52,22 @@ namespace MySearchEngine.Core.Tests.Algorithm
             Assert.Equal((9, "c"), ret[2]);
             Assert.Equal((6, "bc cd"), ret[3]);
         }
+
+        [Fact]
+        public void TrieSearch_Should_SupportChinese()
+        {
+            var trie = new AcPatternMatcher(new List<string>
+            {
+                "中国",
+                "人民",
+                "大学",
+                "中国人民",
+                "中国人民大学",
+            });
+
+            var ret = trie.Match("中国人民大学是中国的一所大学").ToArray();
+
+            Assert.Equal(7, ret.Length);
+        }
     }
 }

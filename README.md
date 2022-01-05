@@ -107,6 +107,12 @@ Note：Client can be anything calling Server API
    > 
    > Note: Not Implemented
    
+   
+   Now, we have a set of terms and a set of docs/pages on hand. Next, we are going to build the most important ***Inverted Index***.
+   
+   > ***Inverted Index***
+   >
+   
 1. Index Storing Stage
 
    - Store each Term as format `{term}|{termId}` into `term.bin` file.
@@ -140,7 +146,7 @@ Note：Client can be anything calling Server API
    > // Use base 10 log here
    > ```
    >
-   > Implemented at [TfIdf](src/MySearchEngine.Core/Algorithm/TfIdf.cs)
+   > Implemented at [TfIdf](src/MySearchEngine.Core/Algorithm/Tf_Idf.cs)
    
 ## Summary
 Searching is a very interesting process. It contains various ideas, algorithms and logics. Surprisingly, the storage capacity of the index results is very small (under the premise of uncompressed, indexing 10,000+ web pages only takes up 15MB of capacity), and there is no need to keep the original documents.
