@@ -13,8 +13,8 @@ namespace MySearchEngine.Core.Tests.Analyzer.TokenFilters
             var tokenFilter = new StemmerTokenFilter();
             var tokens = tokenFilter.Filter(new List<Token>()
             {
-                new Token(1, "ship") { Positions = new List<int>(){ 1 } },
-                new Token(1, "ships") { Positions = new List<int>(){ 2 } },
+                new Token("ship") { Positions = new List<int>(){ 1 } },
+                new Token("ships") { Positions = new List<int>(){ 2 } },
             });
 
             Assert.Single(tokens);

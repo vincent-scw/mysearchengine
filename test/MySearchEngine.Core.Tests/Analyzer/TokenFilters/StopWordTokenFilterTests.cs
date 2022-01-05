@@ -14,8 +14,8 @@ namespace MySearchEngine.Core.Tests.Analyzer.TokenFilters
             var tokenFilter = new StopWordTokenFilter(stopWords);
             var tokens = new List<Token>()
             {
-                new Token(1, "the"),
-                new Token(2, "hey")
+                new Token("the"),
+                new Token("hey")
             };
             tokens = tokenFilter.Filter(tokens);
 

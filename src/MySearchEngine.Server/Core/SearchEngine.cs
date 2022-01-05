@@ -23,10 +23,11 @@ namespace MySearchEngine.Server.Core
             // Analyze text
             var tokens = textAnalyzer.Analyze(searchText);
             // Find indexed docs
-            var indexedDocsWithScore = tokens.SelectMany(CalculateTokenScore).ToList();
+            var indexedDocsWithScore = tokens.SelectMany(t => CalculateTokenScore(t.Term)).ToList();
 
             // Sum up all token scores by page
             var ret = indexedDocsWithScore.GroupBy(ip => ip.DocInfo.DocId)
+                .Where(x => x.Count() == tokens.Count) // All tokens should occur in doc
                 .Select(x =>
                 {
                     var doc = x.First();
@@ -51,9 +52,24 @@ namespace MySearchEngine.Server.Core
             return ret.Skip(from).Take(size).ToList();
         }
 
-        private List<TermDocScore> CalculateTokenScore(Token token)
+        public SearchResultItem Score(string term, int docId)
         {
-            var term = token.Term;
+            var scores = CalculateTokenScore(term);
+            var doc = scores.FirstOrDefault(s => s.DocInfo.DocId == docId);
+            if (doc == null)
+                return null;
+
+            return new SearchResultItem()
+            {
+                DocId = doc.DocInfo.DocId,
+                Title = doc.DocInfo.Title,
+                Url = doc.DocInfo.Url,
+                Score = Math.Round(doc.Score, 4)
+            };
+        }
+
+        private List<TermDocScore> CalculateTokenScore(string term)
+        {
             // Find indexed pages
             if (!_docIndexer.TryGetIndexedDocs(term, out List<TermInDoc> docs))
                 return new List<TermDocScore>();

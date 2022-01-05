@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MySearchEngine.Server.Core;
 
@@ -27,6 +25,17 @@ namespace MySearchEngine.Server.Controllers
             _logger.LogInformation($"Search for \"{searchText}\"");
             var searchResult = _searchEngine.Search(searchText, size, from);
             return Ok(searchResult);
+        }
+
+        [HttpGet("score")]
+        public ActionResult Score([FromQuery] string term, [FromQuery] int docId)
+        {
+            _logger.LogInformation($"Scoring for \"{term}\" in doc:{docId}");
+            var scoreResult = _searchEngine.Score(term, docId);
+            if (scoreResult == null)
+                return NotFound($"Didn't find \"{term}\" in doc: {docId} or doc not found.");
+
+            return Ok(scoreResult);
         }
     }
 }

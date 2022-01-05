@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
-using MySearchEngine.Core.Utilities;
 
 namespace MySearchEngine.Core.Analyzer.Tokenizers
 {
     public class SimpleTokenizer : ITokenizer
     {
-        private readonly IIdGenerator<int> _idGenerator;
         private readonly Dictionary<string, Token> _termTokenMapping;
-        public SimpleTokenizer(IIdGenerator<int> idGenerator)
+        public SimpleTokenizer()
         {
-            _idGenerator = idGenerator;
             _termTokenMapping = new Dictionary<string, Token>();
         }
 
@@ -45,7 +42,7 @@ namespace MySearchEngine.Core.Analyzer.Tokenizers
         {
             var token = _termTokenMapping.ContainsKey(term)
                 ? _termTokenMapping[term]
-                : new Token(_idGenerator.Next(term), term);
+                : new Token(term);
 
             token.Positions.Add(index);
             _termTokenMapping.TryAdd(term, token);

@@ -42,7 +42,7 @@ namespace MySearchEngine.Server.Core
             _stopWords = await _binRepository.ReadStopWordsAsync();
 
             _invertedIndex = new InvertedIndex(await _binRepository.ReadIndexAsync());
-            _idGenerator = new GlobalTermIdGenerator(_termDictionary.Count);
+            _idGenerator = new GlobalTermIdGenerator(_termDictionary.Count, _termDictionary);
         }
 
         public void Index(DocInfo doc, string content)

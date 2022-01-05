@@ -14,10 +14,10 @@ namespace MySearchEngine.Core.Tests.Analyzer.TokenFilters
             var tokenFilter = new LowercaseTokenFilter();
             var tokenList = new List<Token>
             {
-                new Token(1, "Some"), 
-                new Token(2, "ANY"), 
-                new Token(3, "A_B"), 
-                new Token(4, "StringExt")
+                new Token("Some"), 
+                new Token("ANY"), 
+                new Token("A_B"), 
+                new Token("StringExt")
             };
             tokenList = tokenFilter.Filter(tokenList);
 

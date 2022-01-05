@@ -19,11 +19,12 @@ namespace MySearchEngine.Core.Tests.Analyzer
         public TextAnalyzerTests()
         {
             _textAnalyzer = new TextAnalyzer(
+                new IntegerIdGenerator(0),
                 new List<ICharacterFilter>
                 {
                     new HtmlElementFilter()
                 },
-                new SimpleTokenizer(new IntegerIdGenerator(0)), // id should be generated from term count
+                new SimpleTokenizer(), // id should be generated from term count
                 new List<ITokenFilter>
                 {
                     new LowercaseTokenFilter(),

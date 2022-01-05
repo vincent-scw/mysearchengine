@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace MySearchEngine.Core.Utilities
 {
@@ -7,10 +8,10 @@ namespace MySearchEngine.Core.Utilities
         private readonly IntegerIdGenerator _idGenerator;
         private readonly ConcurrentDictionary<string, int> _termIdDict;
 
-        public GlobalTermIdGenerator(int seed)
+        public GlobalTermIdGenerator(int seed, IDictionary<string, int> termIdDict)
         {
             _idGenerator = new IntegerIdGenerator(seed);
-            _termIdDict = new ConcurrentDictionary<string, int>();
+            _termIdDict = new ConcurrentDictionary<string, int>(termIdDict);
         }
 
         public int Next(string parameter)
