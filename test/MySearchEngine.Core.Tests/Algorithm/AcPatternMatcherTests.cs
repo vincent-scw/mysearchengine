@@ -61,13 +61,14 @@ namespace MySearchEngine.Core.Tests.Algorithm
                 "中国",
                 "人民",
                 "大学",
+                "中国人",
                 "中国人民",
                 "中国人民大学",
             });
 
             var ret = trie.Match("中国人民大学是中国的一所大学").ToArray();
 
-            Assert.Equal(7, ret.Length);
+            Assert.Equal(8, ret.Length);
         }
     }
 }
