@@ -27,7 +27,7 @@ namespace MySearchEngine.WebCrawler
             _idGenerator = idGenerator;
             _queueClient = queueClient;
             _binRepository = binRepository;
-            _bloomFilter = new BloomFilter(binRepository.ReadBooleanFilterAsync(100_000).Result);
+            _bloomFilter = new BloomFilter(binRepository.ReadBloomFilterAsync(100_000).Result);
         }
 
         public void DoWork(string url, CancellationToken cancellationToken)
@@ -88,7 +88,7 @@ namespace MySearchEngine.WebCrawler
                 try
                 {
                     // Store to disk every 15 seconds
-                    await _binRepository.StoreBooleanFilterAsync(_bloomFilter.BooleanArray);
+                    await _binRepository.StoreBloomFilterAsync(_bloomFilter.BooleanArray);
                 }
                 catch (Exception ex)
                 {

@@ -15,7 +15,8 @@ namespace MySearchEngine.Server.Core
 
         private IDictionary<string, int> _termDictionary;
         private IDictionary<int, DocInfo> _docDictionary;
-        private IIdGenerator<int> _idGenerator;
+        private IIdGenerator<int> _termIdGenerator;
+        private IIdGenerator<int> _docIdGenerator;
         private IEnumerable<string> _stopWords;
 
         private readonly SemaphoreSlim _semaphoreSlim;
@@ -42,14 +43,19 @@ namespace MySearchEngine.Server.Core
             _stopWords = await _binRepository.ReadStopWordsAsync();
 
             _invertedIndex = new InvertedIndex(await _binRepository.ReadIndexAsync());
-            _idGenerator = new GlobalTermIdGenerator(_termDictionary.Count, _termDictionary);
+            _termIdGenerator = new GlobalTermIdGenerator(_termDictionary.Count, _termDictionary);
+            _docIdGenerator = new IntegerIdGenerator(_docDictionary.Count);
         }
 
         public void Index(DocInfo doc, string content)
         {
-            var textAnalyzer = AnalyzerBuilder.BuildTextAnalyzer(_idGenerator, _stopWords);
+            var textAnalyzer = AnalyzerBuilder.BuildTextAnalyzer(_termIdGenerator, _stopWords);
             var tokens = textAnalyzer.Analyze(content);
             doc.SetTokenCount(tokens.Count);
+            if (doc.DocId < 0)
+            {
+                doc.SetId(_docIdGenerator.Next(null));
+            }
 
             _semaphoreSlim.Wait();
             try

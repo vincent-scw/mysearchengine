@@ -47,7 +47,7 @@ namespace MySearchEngine.Server.BackgroundServices
                 try
                 {
                     // Don't need to store page content
-                    var docInfo = new DocInfo(message.Id, message.Title, message.Url);
+                    var docInfo = new DocInfo(-1, message.Title, message.Url);
                     _docIndexer.Index(docInfo, message.Body);
 
                     await _queueClient.AckAsync(message);

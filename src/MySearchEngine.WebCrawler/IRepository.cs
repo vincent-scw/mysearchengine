@@ -4,7 +4,7 @@ namespace MySearchEngine.WebCrawler
 {
     interface IRepository
     {
-        Task StoreBooleanFilterAsync(bool[] values);
-        Task<bool[]> ReadBooleanFilterAsync(int initCapacity);
+        Task StoreBloomFilterAsync(bool[] values);
+        Task<bool[]> ReadBloomFilterAsync(int initCapacity);
     }
 }

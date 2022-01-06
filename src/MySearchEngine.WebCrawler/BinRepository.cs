@@ -8,16 +8,17 @@ namespace MySearchEngine.WebCrawler
     {
         private const string BF_BIN = "bf.bin";
 
-        public async Task StoreBooleanFilterAsync(bool[] values)
+        public async Task StoreBloomFilterAsync(bool[] values)
         {
             var bytes = Array.ConvertAll(values, b => b ? (byte) 1 : (byte) 0);
             await using var stream = File.CreateText(Path.Combine(FindResPath(Environment.CurrentDirectory), BF_BIN));
             await stream.WriteAsync(Convert.ToHexString(bytes));
         }
 
-        public async Task<bool[]> ReadBooleanFilterAsync(int initCapacity)
+        public async Task<bool[]> ReadBloomFilterAsync(int initCapacity)
         {
-            if (!File.Exists(BF_BIN)) return new bool[initCapacity];
+            if (!File.Exists(Path.Combine(FindResPath(Environment.CurrentDirectory), BF_BIN))) 
+                return new bool[initCapacity];
 
             var values = await File.ReadAllTextAsync(BF_BIN);
             var bytes = Convert.FromHexString(values);

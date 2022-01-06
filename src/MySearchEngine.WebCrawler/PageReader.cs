@@ -14,31 +14,42 @@ namespace MySearchEngine.WebCrawler
 
         private readonly HttpClient _httpClient;
         private readonly CrawlerConfig _config;
+
         public PageReader(CrawlerConfig config)
         {
             _config = config;
             _httpClient = new HttpClient(
-                new HttpClientHandler {AutomaticDecompression = DecompressionMethods.GZip});
+                new HttpClientHandler {AutomaticDecompression = DecompressionMethods.GZip})
+            {
+                Timeout = TimeSpan.FromMilliseconds(5000)
+            };
         }
 
         public async Task<PageInfo> ReadAsync(Uri uri)
         {
-            var response = await _httpClient.GetAsync(uri);
-            if (!_config.AllowedMediaTypes.Contains(response.Content.Headers.ContentType?.MediaType))
-                return null;
-
-            var htmlContent = await response.Content.ReadAsStringAsync();
-            var title = ReadTitle(htmlContent);
-            // No title
-            if (string.IsNullOrWhiteSpace(title))
-                return null;
-            
-            return new PageInfo()
+            try
             {
-                Title = title,
-                Content = htmlContent, 
-                Links = ReadLinks(uri, htmlContent)
-            };
+                var response = await _httpClient.GetAsync(uri);
+                if (!_config.AllowedMediaTypes.Contains(response.Content.Headers.ContentType?.MediaType))
+                    return null;
+
+                var htmlContent = await response.Content.ReadAsStringAsync();
+                var title = ReadTitle(htmlContent);
+                // No title
+                if (string.IsNullOrWhiteSpace(title))
+                    return null;
+
+                return new PageInfo()
+                {
+                    Title = title,
+                    Content = htmlContent,
+                    Links = ReadLinks(uri, htmlContent)
+                };
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public void Dispose()

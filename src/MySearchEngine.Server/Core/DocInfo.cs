@@ -2,7 +2,7 @@
 {
     public class DocInfo
     {
-        public int DocId { get; }
+        public int DocId { get; private set; }
         public string Title { get; }
         public string Url { get; }
         public int TokenCount { get; private set; }
@@ -23,6 +23,11 @@
         public void SetTokenCount(int count)
         {
             TokenCount = count;
+        }
+
+        public void SetId(int id)
+        {
+            DocId = id;
         }
     }
 }
