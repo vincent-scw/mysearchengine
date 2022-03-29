@@ -33,6 +33,8 @@ namespace MySearchEngine.Server
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MySearchEngine.Server", Version = "v1" });
             });
 
+            services.AddCors(opt => opt.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
             services.Configure<BinFile>(Configuration.GetSection(nameof(BinFile)));
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
@@ -54,6 +56,7 @@ namespace MySearchEngine.Server
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MySearchEngine.Server v1"));
             }
 
+            app.UseCors("AllowAll");
             app.UseHttpsRedirection();
 
             app.UseRouting();
