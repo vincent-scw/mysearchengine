@@ -17,10 +17,11 @@ namespace MySearchEngine.WebCrawler
 
         public async Task<bool[]> ReadBloomFilterAsync(int initCapacity)
         {
-            if (!File.Exists(Path.Combine(FindResPath(Environment.CurrentDirectory), BF_BIN))) 
+            var filePath = Path.Combine(FindResPath(Environment.CurrentDirectory), BF_BIN);
+            if (!File.Exists(filePath)) 
                 return new bool[initCapacity];
 
-            var values = await File.ReadAllTextAsync(BF_BIN);
+            var values = await File.ReadAllTextAsync(filePath);
             var bytes = Convert.FromHexString(values);
             return Array.ConvertAll(bytes, b => b == (byte)1);
 
