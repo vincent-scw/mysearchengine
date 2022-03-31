@@ -76,7 +76,7 @@ namespace MySearchEngine.WebCrawler
             var regex = new Regex(LinkPattern);
             var matches = regex.Matches(content).Select(x => x.Value);
 
-            return matches.Where(match => match.StartsWith($"{uri.Scheme}://{uri.Host}")
+            return matches.Where(match => match.Contains(uri.Host, StringComparison.InvariantCultureIgnoreCase)
                                           && !_config.ExcludeLinkSuffix.Any(match.EndsWith)).ToList();
         }
     }
