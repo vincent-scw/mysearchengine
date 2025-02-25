@@ -15,15 +15,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MySearchEngine.Core\MySearchEngine.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="..\..\res\qctrl.proto" GrpcServices="Client" Access="Internal">
-      <Link>qctrl.proto</Link>
-    </Protobuf>
-  </ItemGroup>
+
 </Project>

@@ -1,9 +1,7 @@
-﻿using MySearchEngine.Core;
-using MySearchEngine.Server.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MySearchEngine.Server
+namespace MySearchEngine.Core
 {
     public interface IRepository
     {

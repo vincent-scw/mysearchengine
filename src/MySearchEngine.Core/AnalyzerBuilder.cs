@@ -5,7 +5,7 @@ using MySearchEngine.Core.Analyzer.Tokenizers;
 using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 
-namespace MySearchEngine.Server.Core
+namespace MySearchEngine.Core
 {
     public class AnalyzerBuilder
     {

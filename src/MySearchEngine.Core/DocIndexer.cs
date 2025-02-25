@@ -1,11 +1,10 @@
-﻿using MySearchEngine.Core;
-using MySearchEngine.Core.Algorithm;
+﻿using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MySearchEngine.Server.Core
+namespace MySearchEngine.Core
 {
     public class DocIndexer : IDocIndexer
     {

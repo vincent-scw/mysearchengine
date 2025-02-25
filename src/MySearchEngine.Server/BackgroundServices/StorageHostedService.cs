@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MySearchEngine.Server.Core;
+using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.BackgroundServices
 {

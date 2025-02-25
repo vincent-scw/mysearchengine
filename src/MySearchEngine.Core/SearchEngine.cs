@@ -1,16 +1,15 @@
-﻿using MySearchEngine.Core;
-using MySearchEngine.Core.Algorithm;
+﻿using MySearchEngine.Core.Algorithm;
 using MySearchEngine.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MySearchEngine.Server.Core
+namespace MySearchEngine.Core
 {
     public class SearchEngine
     {
         private readonly IDocIndexer _docIndexer;
-        
+
         public SearchEngine(
             IDocIndexer docIndexer)
         {
@@ -78,7 +77,7 @@ namespace MySearchEngine.Server.Core
             var tds = docs.Select(p =>
             {
                 if (!_docIndexer.TryGetDocInfo(p.DocId, out DocInfo di))
-                    return (TermDocScore) null;
+                    return null;
 
                 // Use TF-IDF to calculate the score
                 return new TermDocScore(term, di,

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MySearchEngine.Server.Core
+namespace MySearchEngine.Core
 {
     public class SearchResultItem
     {

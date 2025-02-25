@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MySearchEngine.Server.Core;
+using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Controllers
 {

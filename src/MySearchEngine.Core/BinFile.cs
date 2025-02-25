@@ -1,4 +1,4 @@
-﻿namespace MySearchEngine.Server
+﻿namespace MySearchEngine.Core
 {
     public class BinFile
     {

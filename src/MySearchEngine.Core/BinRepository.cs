@@ -4,12 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using MySearchEngine.Core;
-using MySearchEngine.Server.Core;
 using Newtonsoft.Json;
 using File = System.IO.File;
 
-namespace MySearchEngine.Server
+namespace MySearchEngine.Core
 {
     public class BinRepository : IRepository
     {

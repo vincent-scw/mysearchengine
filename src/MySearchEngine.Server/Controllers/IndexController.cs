@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MySearchEngine.Server.Core;
+using MySearchEngine.Core;
 
 namespace MySearchEngine.Server.Controllers
 {

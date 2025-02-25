@@ -1,8 +1,7 @@
-﻿using MySearchEngine.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MySearchEngine.Server.Core
+namespace MySearchEngine.Core
 {
     public interface IDocIndexer
     {

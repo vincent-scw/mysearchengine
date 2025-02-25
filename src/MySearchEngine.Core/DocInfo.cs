@@ -1,4 +1,4 @@
-﻿namespace MySearchEngine.Server.Core
+﻿namespace MySearchEngine.Core
 {
     public class DocInfo
     {

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package qctrl;
+
+service QueueSvc {
+	rpc Enqueue (Message) returns (Result);
+	rpc Read (google.protobuf.Empty) returns (Message);
+	rpc Ack (Message) returns (Result);
+}
+
+message Message {
+	int32 id = 1;
+	google.protobuf.Timestamp timestamp = 2;
+	string title = 3;
+	string url = 4;
+	string body = 5;
+}
+
+message Result {
+	bool succeed = 1;
+}

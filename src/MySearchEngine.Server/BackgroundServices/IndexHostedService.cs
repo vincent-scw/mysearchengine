@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using MySearchEngine.Server.Core;
+using MySearchEngine.Core;
 using Qctrl;
 
 namespace MySearchEngine.Server.BackgroundServices
