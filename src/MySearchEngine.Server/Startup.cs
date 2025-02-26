@@ -35,7 +35,6 @@ namespace MySearchEngine.Server
 
             services.AddCors(opt => opt.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
-            services.Configure<BinFile>(Configuration.GetSection(nameof(BinFile)));
             services.AddSingleton((sp) =>
                 new QueueSvc.QueueSvcClient(GrpcChannel.ForAddress(Configuration.GetConnectionString("QueueService"),
                     new GrpcChannelOptions() {Credentials = ChannelCredentials.Insecure})));

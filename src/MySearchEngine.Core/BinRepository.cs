@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using File = System.IO.File;
 
 namespace MySearchEngine.Core
@@ -12,9 +11,9 @@ namespace MySearchEngine.Core
     public class BinRepository : IRepository
     {
         private readonly BinFile _binFile;
-        public BinRepository(IOptions<BinFile> binFileOptions)
+        public BinRepository()
         {
-            _binFile = binFileOptions.Value;
+            _binFile = new BinFile();
         }
 
         public async Task StoreTermsAsync(IDictionary<string, int> termDictionary)
@@ -42,6 +41,15 @@ namespace MySearchEngine.Core
             {
                 await stream.WriteLineAsync(
                     $"{termId}|{string.Join(',', pages.Select(x => $"{x.DocId}:{x.Count}"))}");
+            }
+        }
+
+        public async Task StoreMatrixAsync(IDictionary<int, double[]> matrix)
+        {
+            await using var stream = ReadFileAsync(_binFile.TfIdfMatrix);
+            foreach (var (_, vector) in matrix)
+            {
+                await stream.WriteLineAsync(string.Join(",", vector));
             }
         }
 
@@ -103,6 +111,17 @@ namespace MySearchEngine.Core
                 ret.TryAdd(Convert.ToInt32(parts[0]), list);
             }
 
+            return ret;
+        }
+
+        public async Task<IDictionary<int, double[]>> ReadMatrixAsync()
+        {
+            var lines = await ReadLinesAsync(_binFile.TfIdfMatrix);
+            var ret = new Dictionary<int,  double[]>();
+            for (var i = 0; i < lines.Length; i++)
+            {
+                ret.Add(i + 1, lines[i].Split(',').Select(double.Parse).ToArray());
+            }
             return ret;
         }
 

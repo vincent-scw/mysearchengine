@@ -263,3 +263,4 @@ pub/
 /res/index.bin
 /res/bf.bin
 /res/doc.bin
+/res/tfidf_matrix.csv
