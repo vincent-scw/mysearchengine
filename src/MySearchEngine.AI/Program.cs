@@ -39,16 +39,17 @@ public class Program
                     var flag3 = true;
                     do
                     {
-                        Console.WriteLine("Input doc id (should be 1-11238).");
+                        Console.WriteLine("Input doc id (id range: 1-11238).");
                         var docId = Console.ReadLine();
                         try
                         {
                             var res = await gen.GetSimilarDocsAsync(int.Parse(docId));
-                            Console.WriteLine($"Found by similarity for doc {docId}-{res.DocTitle}:");
+                            Console.WriteLine($"Found by similarity for doc:");
+                            Console.WriteLine($"{docId}-{res.DocTitle}");
                             for (int i = 0; i < res.SimilarDocs.Count(); i++)
                             {
                                 Console.WriteLine($"  {i}> {res.SimilarDocs[i].DocId} - {res.SimilarDocs[i].Title}");
-                                Console.WriteLine($"  {res.SimilarDocs[i].Url}");
+                                Console.WriteLine($"     {res.SimilarDocs[i].Url}");
                             }
                         }
                         catch (Exception ex)
